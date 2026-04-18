@@ -9,6 +9,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/static/css/style.css" />
   <style>
+    /* Główny nagłówek w kolorze PKO BP */
+    .site-header { 
+        background: #003399 !important; 
+        border-bottom: 2px solid #002266;
+    }
+    
     /* Style dla kategorii Hackathonu */
     .generator-panel { background: #ffffff; padding: 30px; border-radius: 12px; margin-top: 30px; text-align: center; border: 1px solid #eaeaea; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
     .generator-panel h3 { color: #1a1a1a; font-weight: 600; margin-bottom: 5px; }
@@ -16,16 +22,43 @@
     .btn-group { display: flex; gap: 12px; justify-content: center; margin-top: 15px; flex-wrap: wrap; }
     .cat-btn { padding: 12px 24px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; opacity: 0.9; color: white; font-size: 0.95rem; }
     .cat-btn:hover { opacity: 1; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
-    .cat-klasyczne { background: #b91c1c; }
+    
+    /* Kolory przycisków generatora */
+    .cat-klasyczne { background: #e00404; }
     .cat-pko { background: #003399; }
-    .cat-tauron { background: #e4007d; }
+    .cat-tauron { background: #FF0090; }
     
+    /* Etykiety na kartach */
+    .badge-klasyczne { background: #e00404; color: white; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; margin-bottom: 10px; display: inline-block; font-weight: bold; text-transform: uppercase;}
     .badge-pko { background: #003399; color: white; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; margin-bottom: 10px; display: inline-block; font-weight: bold; text-transform: uppercase;}
-    .badge-tauron { background: #e4007d; color: white; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; margin-bottom: 10px; display: inline-block; font-weight: bold; text-transform: uppercase;}
-    .badge-klasyczne { background: #374151; color: white; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; margin-bottom: 10px; display: inline-block; font-weight: bold; text-transform: uppercase;}
+    .badge-tauron { background: #FF0090; color: white; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; margin-bottom: 10px; display: inline-block; font-weight: bold; text-transform: uppercase;}
     
-    /* Box na rozwiązanie - domyślnie dodany padding dla ładnego wyglądu */
-    .solution-box { margin-top: 15px; padding: 15px; background: #f9f9f9; border-left: 4px solid #b91c1c; border-radius: 4px; }
+    /* Box rozwiązania i Box edukacyjny */
+    .solution-box { margin-top: 15px; padding: 15px; background: #f9f9f9; border-left: 4px solid #003399; border-radius: 4px; }
+    .edu-box { margin-top: 15px; padding: 15px; background: #e0f2fe; border-left: 4px solid #003399; border-radius: 4px; display: flex; flex-direction: column; gap: 8px;}
+    .edu-box h4 { color: #003399; margin: 0; display: flex; align-items: center; gap: 6px; font-size: 0.95rem; }
+    .edu-box p { margin: 0; color: #1e293b; font-size: 0.9rem; line-height: 1.5; }
+
+    /* Układ dla dwóch rzędów filtrów */
+    .filters-container {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+    .filter-tabs { margin-bottom: 0 !important; }
+
+    /* Kolory aktywnych filtrów - Kategorie */
+    #catTabs .tab[data-cat="Klasyczne"].active { background: #e00404; border-color: #e00404; color: white; }
+    #catTabs .tab[data-cat="PKO Bank Polski"].active { background: #003399; border-color: #003399; color: white; }
+    #catTabs .tab[data-cat="Tauron"].active { background: #FF0090; border-color: #FF0090; color: white; }
+
+    /* Kolory aktywnych filtrów - Poziom Trudności */
+    #diffTabs .tab[data-diff="easy"].active { background: #2d7a4f; border-color: #2d7a4f; color: white; }
+    #diffTabs .tab[data-diff="medium"].active { background: #c4891a; border-color: #c4891a; color: white; }
+    #diffTabs .tab[data-diff="hard"].active { background: #e00404; border-color: #e00404; color: white; }
+
   </style>
 </head>
 <body>
@@ -50,7 +83,7 @@
 
       <main class="list-main">
 
-<div id="playerSetupInline" class="player-setup-inline" style="display:none;">
+        <div id="playerSetupInline" class="player-setup-inline" style="display:none;">
           <h4 class="player-setup-heading">Gracze <span id="playerCount" class="player-count"></span></h4>
           <div class="player-input-wrap">
             <input id="playerNameInput" type="text" placeholder="Imię gracza..." maxlength="20"
@@ -61,11 +94,20 @@
           <p class="player-hint">Dodaj graczy, a potem kliknij wybraną historię, aby rozpocząć</p>
         </div>
 
-        <div class="filter-tabs" id="filterTabs">
-          <button class="tab active" data-filter="all">Wszystkie</button>
-          <button class="tab" data-filter="easy">Łatwe</button>
-          <button class="tab" data-filter="medium">Średnie</button>
-          <button class="tab" data-filter="hard">Trudne</button>
+        <div class="filters-container">
+            <div class="filter-tabs" id="catTabs">
+              <button class="tab active" data-cat="all">Wszystkie kategorie</button>
+              <button class="tab" data-cat="Klasyczne">Klasyczne</button>
+              <button class="tab" data-cat="PKO Bank Polski">PKO BP</button>
+              <button class="tab" data-cat="Tauron">Tauron</button>
+            </div>
+            
+            <div class="filter-tabs" id="diffTabs">
+              <button class="tab active" data-diff="all">Wszystkie poziomy</button>
+              <button class="tab" data-diff="easy">Łatwe</button>
+              <button class="tab" data-diff="medium">Średnie</button>
+              <button class="tab" data-diff="hard">Trudne</button>
+            </div>
         </div>
 
         <div class="stories-grid" id="storiesGrid">
@@ -102,8 +144,13 @@
             <button class="reveal-btn" id="btn-show" onclick="toggleRozwiazanie()">Pokaż rozwiązanie</button>
 
             <div id="rozwiazanie-box" class="solution-box" style="display: none;">
-                <strong style="color: #b91c1c;">Prawdziwa historia:</strong><br>
-                <span id="gameSolution"></span>
+                <strong style="color: #003399;">Prawdziwa historia:</strong><br>
+                <span id="gameSolution" style="display: block; margin-bottom: 15px;"></span>
+                
+                <div class="edu-box" id="eduBox">
+                    <h4>💡 Pigułka Wiedzy</h4>
+                    <p id="gameEducation"></p>
+                </div>
             </div>
           </div>
 
@@ -137,12 +184,15 @@
   <script>
     let currentStories      = [];
     let activeStory         = null;
-    let gameMode            = 'cooperation'; // 'cooperation' | 'competition'
+    let gameMode            = 'cooperation'; 
     let players             = [];
     let currentPlayerIndex  = 0;
     let turnTimer           = null;
     let turnTimeLeft        = 0;
     let firstQuestionAsked  = false;
+    
+    let activeCatFilter     = 'all';
+    let activeDiffFilter    = 'all';
 
     const diffTextPl = {
         'easy':'ŁATWE','medium':'ŚREDNIE','hard':'TRUDNE',
@@ -155,11 +205,22 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         fetchStories();
-        document.querySelectorAll('#filterTabs .tab').forEach(tab => {
+        
+        document.querySelectorAll('#catTabs .tab').forEach(tab => {
             tab.addEventListener('click', (e) => {
-                document.querySelectorAll('#filterTabs .tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('#catTabs .tab').forEach(t => t.classList.remove('active'));
                 e.target.classList.add('active');
-                renderStories(e.target.dataset.filter);
+                activeCatFilter = e.target.dataset.cat;
+                renderStories();
+            });
+        });
+
+        document.querySelectorAll('#diffTabs .tab').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                document.querySelectorAll('#diffTabs .tab').forEach(t => t.classList.remove('active'));
+                e.target.classList.add('active');
+                activeDiffFilter = e.target.dataset.diff;
+                renderStories();
             });
         });
     });
@@ -168,23 +229,32 @@
         try {
             const res = await fetch('/api/stories?t=' + Date.now());
             currentStories = await res.json();
-            renderStories('all');
+            renderStories();
         } catch {
             document.getElementById('storiesGrid').innerHTML = '<div class="loading-state">Błąd ładowania.</div>';
         }
     }
 
-    function renderStories(filter) {
+    function renderStories() {
         const grid = document.getElementById('storiesGrid');
         grid.innerHTML = '';
+        
         const filtered = currentStories.filter(s => {
-            if (filter === 'all') return true;
-            if (s.difficulty === filter) return true;
-            if (filter === 'easy'   && s.difficulty === 'Łatwe')   return true;
-            if (filter === 'medium' && s.difficulty === 'Średnie') return true;
-            if (filter === 'hard'   && s.difficulty === 'Trudne')  return true;
-            return false;
+            const matchCat = (activeCatFilter === 'all') || (s.category === activeCatFilter);
+            let matchDiff = false;
+            if (activeDiffFilter === 'all') matchDiff = true;
+            else if (s.difficulty === activeDiffFilter) matchDiff = true;
+            else if (activeDiffFilter === 'easy'   && s.difficulty === 'Łatwe')   matchDiff = true;
+            else if (activeDiffFilter === 'medium' && s.difficulty === 'Średnie') matchDiff = true;
+            else if (activeDiffFilter === 'hard'   && s.difficulty === 'Trudne')  matchDiff = true;
+            return matchCat && matchDiff;
         });
+        
+        if (filtered.length === 0) {
+            grid.innerHTML = '<div class="loading-state">Brak spraw spełniających te kryteria.</div>';
+            return;
+        }
+
         filtered.forEach(story => {
             const card = document.createElement('div');
             card.className = 'story-card';
@@ -221,7 +291,6 @@
         finally   { panel.innerText = oldText; }
     }
 
-    // Ustawia tryb gry – toggle w headerze
     function setMode(mode) {
         gameMode = mode;
         document.getElementById('modeTileCooperation').classList.toggle('active', mode === 'cooperation');
@@ -298,7 +367,6 @@
         startTurnTimer();
     }
 
-    // Kliknięcie historii startuje grę w aktualnie wybranym trybie
     function openGame(storyData) {
         if (gameMode === 'competition' && players.length === 0) {
             const setup = document.getElementById('playerSetupInline');
@@ -326,6 +394,15 @@
         document.getElementById('gameTitle').innerText    = storyData.title;
         document.getElementById('gameStory').innerText    = storyData.story;
         document.getElementById('gameSolution').innerText = storyData.solution || "⚠️ Odśwież stronę (Ctrl+F5).";
+
+        // Wstrzykiwanie tekstu edukacyjnego
+        const eduBox = document.getElementById('eduBox');
+        if (storyData.education) {
+            eduBox.style.display = 'flex';
+            document.getElementById('gameEducation').innerText = storyData.education;
+        } else {
+            eduBox.style.display = 'none';
+        }
 
         const badge = document.getElementById('catBadge');
         badge.innerText = storyData.category || 'Klasyczne';
@@ -404,11 +481,16 @@
             const answer = data.answer.trim();
             addMessage('Sędzia', answer, 'ai-msg');
 
-            if (gameMode === 'competition' && players.length > 0) {
-                if (answer.toLowerCase().includes('zgadł')) {
+            if (answer.toLowerCase().includes('zgadł')) {
+                if (gameMode === 'competition' && players.length > 0) {
                     showWinner(players[currentPlayerIndex]);
-                    return;
+                } else {
+                    showWinner(); 
                 }
+                return;
+            }
+
+            if (gameMode === 'competition' && players.length > 0) {
                 firstQuestionAsked = true;
                 currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
                 updateTurnIndicator();
@@ -430,13 +512,25 @@
         const container = document.getElementById('messages');
         const banner = document.createElement('div');
         banner.className = 'winner-banner';
-        banner.innerHTML = `<h3>🏆 ${name} wygrywa!</h3><p>Zagadka rozwiązana! Gratulacje!</p>`;
+        
+        if (name) {
+            banner.innerHTML = `<h3>🏆 ${name} wygrywa!</h3><p>Zagadka rozwiązana! Gratulacje!</p>`;
+        } else {
+            banner.innerHTML = `<h3>🏆 WYGRALIŚCIE!</h3><p>Zagadka rozwiązana! Świetna robota zespołowa!</p>`;
+        }
+        
         container.appendChild(banner);
         container.scrollTop = container.scrollHeight;
         document.getElementById('turnIndicator').style.display = 'none';
+        
+        // Blokada czatu
         document.getElementById('questionInput').disabled = true;
         document.getElementById('questionInput').dataset.won = '1';
         document.getElementById('askBtn').disabled = true;
+
+        // Automatyczne odsłonięcie historii i Pigułki Wiedzy
+        document.getElementById('rozwiazanie-box').style.display = 'block';
+        document.getElementById('btn-show').innerText = "Ukryj rozwiązanie";
     }
 
     function addMessage(author, text, className) {

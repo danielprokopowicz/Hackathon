@@ -21,7 +21,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+client = genai.Client(api_key="AQ.Ab8RN6LbnO51caxuSYND3bznM-MXmflMW9WLH9wcW4h92QEF8Q")
 GEMINI_MODEL = "gemma-3-27b-it"
 
 STORIES_FILE = Path(__file__).parent / "stories.json"
@@ -80,35 +80,61 @@ def ask_question(req: QuestionRequest):
 @app.post("/api/generate")
 def generate_story(req: GenerateRequest):
     if req.category == "PKO Bank Polski":
-        kontekst = "Stwórz pozytywną zagadkę o sukcesie finansowym, oszczędzaniu lub innowacjach w PKO BP."
+        kontekst = "Stwórz zagadkę o edukacji finansowej, bezpieczeństwie w sieci (np. phishing), oszczędzaniu lub aplikacji mobilnej. Rozwiązanie ma pokazywać mądrą decyzję finansową."
     elif req.category == "Tauron":
-        kontekst = "Stwórz pozytywną zagadkę o czystej energii, fotowoltaice lub innowacjach Taurona."
+        kontekst = "Stwórz zagadkę o czystej energii, fotowoltaice, oszczędzaniu prądu lub innowacjach Taurona."
     else:
         kontekst = "Stwórz mroczną, zaskakującą zagadkę w stylu klasycznych 'Czarnych Historii'."
 
+    # Znacznie wzmocniony prompt wymuszający czysty JSON
     prompt = (
         f"{kontekst}\n"
         f"Poziom trudności: {req.difficulty}\n"
-        'Zwróć wynik WYŁĄCZNIE jako JSON używając dokładnie tych kluczy: "title", "difficulty", "category", "story", "solution".\n'
-        'Zarys ma być krótki, rozwiązanie logiczne.'
+        "Zwróć wynik WYŁĄCZNIE jako czysty, poprawny obiekt JSON. "
+        "Nie dodawaj żadnego tekstu przed ani po JSON-ie. "
+        "Nie używaj znaczników kodu (np. ```json). "
+        "Użyj dokładnie tych kluczy:\n"
+        "{\n"
+        '  "title": "Tytuł historii",\n'
+        '  "difficulty": "easy | medium | hard",\n'
+        '  "category": "Kategoria",\n'
+        '  "story": "Krótki zarys historii",\n'
+        '  "solution": "Logiczne rozwiązanie",\n'
+        '  "education": "Cenna pigułka wiedzy związana z zagadką"\n'
+        "}"
     )
 
-    # Wymuszenie czystego JSONa w nowym API od Google
-    response = client.models.generate_content(
-        model=GEMINI_MODEL, 
-        contents=prompt,
-        config=types.GenerateContentConfig(
-            response_mime_type="application/json",
-            temperature=0.7
+    try:
+        response = client.models.generate_content(
+            model=GEMINI_MODEL, # Używamy głównego modelu Gemma
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                temperature=0.7 # Odrobinę kreatywności, ale zachowaj strukturę
+                # Usunęliśmy response_mime_type
+            )
         )
-    )
-    
-    text = response.text.strip().replace("```json", "").replace("```", "").strip()
-    data = json.loads(text)
-    data["id"] = "random"
-    # Upewniamy się, że kategoria to ta wybrana
-    data["category"] = req.category 
-    return data
+        
+        # Agresywne czyszczenie odpowiedzi
+        text = response.text.strip()
+        # Usuń potencjalne znaczniki markdown (nawet jeśli prosiliśmy by ich nie było)
+        if text.startswith("```json"):
+            text = text[7:]
+        if text.startswith("```"):
+             text = text[3:]
+        if text.endswith("```"):
+             text = text[:-3]
+        text = text.strip()
+
+        data = json.loads(text)
+        data["id"] = "random"
+        data["category"] = req.category 
+        return data
+
+    except Exception as e:
+        # Przechwycenie błędu, jeśli odpowiedź nie jest poprawnym JSONem
+        print(f"Błąd generowania JSON: {e}")
+        print(f"Odpowiedź modelu: {response.text if 'response' in locals() else 'Brak odpowiedzi'}")
+        raise HTTPException(status_code=500, detail="Nie udało się wygenerować poprawnego formatu historii. Spróbuj ponownie.")
 
 frontend_path = Path(__file__).parent.parent / "frontend"
 app.mount("/static", StaticFiles(directory=str(frontend_path / "static")), name="static")

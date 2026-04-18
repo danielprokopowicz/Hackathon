@@ -12,7 +12,7 @@
   --paper2:     #ede8dc;
   --paper3:     #e4ddd0;
   --white:      #ffffff;
-  --accent-red: #8B1A1A;
+  --accent-blue: #003399;
   --accent-gold:#c4891a;
   --accent-green:#2d7a4f;
   --muted:      #6b6258;
@@ -210,7 +210,7 @@ body {
 
 .story-card.easy::before   { background: var(--accent-green); }
 .story-card.medium::before { background: var(--accent-gold); }
-.story-card.hard::before   { background: var(--accent-red); }
+.story-card.hard::before   { background: var(--accent-blue); }
 
 .story-card:hover {
   transform: translateY(-3px);
@@ -469,7 +469,7 @@ body {
 }
 
 .msg.ai.yes     { background: #e8f4ed; color: #1a5231; border-left: 3px solid var(--accent-green); }
-.msg.ai.no      { background: #fdeaea; color: #6b1212; border-left: 3px solid var(--accent-red); }
+.msg.ai.no      { background: #fdeaea; color: #6b1212; border-left: 3px solid var(--accent-blue); }
 .msg.ai.partial { background: #fef3e2; color: #6b3d08; border-left: 3px solid var(--accent-gold); }
 .msg.ai.loading { background: var(--paper2); color: var(--muted); font-style: italic; }
 
@@ -499,7 +499,7 @@ body {
 
 .input-row button {
   padding: 0.65rem 1.1rem;
-  background: var(--accent-red);
+  background: var(--accent-blue);
   color: white;
   border: none;
   border-radius: var(--radius-sm);
@@ -813,7 +813,7 @@ body {
 
 .add-player-btn {
   padding: 10px 20px;
-  background: var(--accent-red);
+  background: var(--accent-blue);
   color: white;
   border: none;
   border-radius: var(--radius-sm);
@@ -863,12 +863,12 @@ body {
   transition: color var(--transition);
 }
 
-.player-chip-remove:hover { color: var(--accent-red); }
+.player-chip-remove:hover { color: var(--accent-blue); }
 
 .start-game-btn {
   width: 100%;
   padding: 0.85rem;
-  background: #b91c1c;
+  background: #003399;
   color: white;
   border: none;
   border-radius: var(--radius-sm);
@@ -927,7 +927,7 @@ body {
 }
 
 .turn-timer-urgent {
-  color: var(--accent-red);
+  color: var(--accent-blue);
   background: #fdeaea;
 }
 

@@ -58,21 +58,21 @@ Po rozwiązaniu zagadki, gracze odblokowują **"Pigułkę Wiedzy"** — krótką
 
 ## 🚀 Jak uruchomić lokalnie
 
-1. **Sklonuj repozytorium:**
+**Sklonuj repozytorium:**
    ```bash
    git clone [TWÓJ LINK DO GITHUBA]
+   cd hackathon
    cd rozwiklaj_to
-Zainstaluj zależności:
+**Zainstaluj zależności:**
+  ```bash
+   pip install -r requirements.txt
 
-Bash
-pip install -r requirements.txt
 Skonfiguruj klucz API:
 Projekt korzysta z Google GenAI. Aby uruchomić go lokalnie, proszę utworzyć plik .env w folderze backend i dodać mój klucz API.
 
-Uruchom serwer backendowy:
-
-Bash
-cd backend
-python -m uvicorn main:app --reload
+**Uruchom serwer backendowy:**
+  ```bash
+   cd backend
+   python -m uvicorn main:app --reload
 Zagraj!
 Otwórz przeglądarkę i wejdź pod adres http://127.0.0.1:8000.

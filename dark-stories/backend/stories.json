@@ -214,5 +214,113 @@
     "story": "Przestępca włamał się na konto Anny bez wirusów i phishingu. Systemy banku były bezpieczne. Jak to zrobił?",
     "solution": "Anna miała to samo hasło do banku i do małego sklepu internetowego. Sklep miał wyciek danych, a hakerzy po prostu wypróbowali to hasło w banku.",
     "education": "Wiedza PKO BP: Twoje hasło do banku musi być unikalne. Nigdy nie używaj go w innych serwisach, social mediach czy sklepach."
+  },
+  {
+    "id": 25,
+    "title": "Nocny włamywacz",
+    "category": "Tauron",
+    "difficulty": "medium",
+    "story": "Jan wyjechał na urlop. W środku nocy spojrzał w telefon i zauważył, że w jego pustym domu zużycie prądu drastycznie rośnie. Wezwał policję, ale patrol nie znalazł żadnego włamywacza.",
+    "solution": "Jan miał aplikację połączoną z inteligentnym licznikiem. Przed wyjazdem zapomniał wyłączyć starego bojlera elektrycznego, który był zaprogramowany, by automatycznie podgrzewać wodę w godzinach nocnych, korzystając z tańszej taryfy.",
+    "education": "Wiedza Tauron: Aplikacja 'Mój Tauron' z inteligentnym e-Licznikiem pozwala śledzić zużycie prądu na bieżąco. Wyjeżdżając na urlop, pamiętaj o odłączeniu urządzeń grzewczych i bojlerów."
+  },
+  {
+    "id": 26,
+    "title": "Gorące słońce",
+    "category": "Tauron",
+    "difficulty": "medium",
+    "story": "W samym środku bezchmurnego, upalnego lata, w nowoczesnym domu Marka nagle zgasły wszystkie światła. Marek spojrzał na bezchmurne niebo i uśmiechnął się, bo wiedział, że to jego wina.",
+    "solution": "Marek zamontował na dachu zbyt dużą instalację fotowoltaiczną bez konsultacji. W szczycie produkcji słońca napięcie w sieci domowej wzrosło tak bardzo, że falownik ze względów bezpieczeństwa automatycznie odciął zasilanie.",
+    "education": "Wiedza Tauron: Projekt i montaż paneli fotowoltaicznych najlepiej powierzyć ekspertom. Odpowiednio dobrana moc instalacji zapobiega wyłączeniom falownika latem."
+  },
+  {
+    "id": 27,
+    "title": "Cisi pożeracze",
+    "category": "Tauron",
+    "difficulty": "easy",
+    "story": "Anna wyłączyła wszystkie światła, telewizor i komputer, po czym nie było jej w domu przez cały miesiąc. Gdy przyszedł rachunek za prąd, była wściekła, bo kwota wciąż była wysoka.",
+    "solution": "Anna wyłączyła urządzenia wyłącznie pilotem. Zostawiła w gniazdkach włączone listwy, ładowarki i sprzęt w trybie czuwania (stand-by), które przez miesiąc cicho pobierały energię.",
+    "education": "Wiedza Tauron: Urządzenia w trybie 'stand-by' to cisi pożeracze energii. Odłączanie ładowarek czy wyłączanie listew zasilających na noc pozwala realnie obniżyć rachunki."
+  },
+  {
+    "id": 28,
+    "title": "Rachunek za ciemność",
+    "category": "Tauron",
+    "difficulty": "hard",
+    "story": "Piotr dostał rano SMS o odcięciu prądu za niedopłatę 2,50 zł. Szybko kliknął w link i opłacił kwotę. Wieczorem stracił oszczędności, a prąd w domu i tak mu odcięto.",
+    "solution": "SMS był oszustwem (phishingiem), przez co Piotr oddał złodziejom dane do konta bankowego. Prąd zgasł z zupełnie innego powodu – Piotr całkowicie zapomniał zapłacić prawdziwego, wyższego rachunku z ubiegłego miesiąca.",
+    "education": "Wiedza Tauron: Ignoruj SMS-y grożące nagłym odcięciem energii z powodu 'drobnych niedopłat'. Prawdziwe saldo rozliczeń sprawdzaj zawsze w oficjalnej aplikacji Mój Tauron."
+  },
+  {
+    "id": 29,
+    "title": "Śmiertelne oszczędności",
+    "category": "Tauron",
+    "difficulty": "hard",
+    "story": "Chcąc zaoszczędzić na rachunkach w mroźną zimę, kobieta idealnie uszczelniła w swoim mieszkaniu wszystkie okna i zakleiła kratki wentylacyjne. Następnego dnia już nie żyła.",
+    "solution": "Kobieta korzystała w łazience ze starego piecyka gazowego. Brak dostępu świeżego powietrza sprawił, że w pomieszczeniu zaczął ulatniać się bezwonny tlenek węgla (czad), który doprowadził do zatrucia.",
+    "education": "Wiedza Tauron: Zatrzymanie ciepła nigdy nie może oznaczać blokowania wentylacji! Przy urządzeniach gazowych niezbędny jest stały dopływ powietrza i zamontowany czujnik czadu."
+  },
+  {
+    "id": 30,
+    "title": "Zabójczy upał",
+    "category": "Tauron",
+    "difficulty": "easy",
+    "story": "W najgorętszy dzień lata Tomasz kupił i uruchomił w szczelnie zamkniętym pokoju potężny klimatyzator. Po dwóch godzinach temperatura w pomieszczeniu drastycznie wzrosła.",
+    "solution": "Tomasz kupił klimatyzator przenośny, ale zapomniał wystawić rurę wyrzucającą gorące powietrze przez okno. Urządzenie chłodziło z przodu, ale z tyłu oddawało jeszcze więcej wyprodukowanego ciepła.",
+    "education": "Wiedza Tauron: Urządzenia chłodnicze przenoszą ciepło, same zużywając energię. Czytaj instrukcje montażu sprzętu – nieprawidłowe użytkowanie to strata pieniędzy na prąd."
+  },
+  {
+    "id": 31,
+    "title": "Poranna awaria",
+    "category": "Tauron",
+    "difficulty": "medium",
+    "story": "Kobieta podłączyła na noc swój nowy samochód do prądu w garażu. Rano samochód był pełny, ale kobieta nie mogła wyjechać, bo utknęła w ciemnościach.",
+    "solution": "Kobieta użyła zwykłego gniazdka. Długotrwałe obciążenie wywołane przez ładowarkę auta spaliło starą instalację elektryczną w garażu, unieruchamiając elektryczną bramę wyjazdową.",
+    "education": "Wiedza Tauron: Ładowanie aut elektrycznych w domu wymaga odpowiedniej infrastruktury. Zainwestuj w profesjonalny Wallbox i przegląd instalacji, by ładować bezpiecznie."
+  },
+  {
+    "id": 32,
+    "title": "Duch w salonie",
+    "category": "Tauron",
+    "difficulty": "easy",
+    "story": "Rodzina zainstalowała oświetlenie na czujnik ruchu, by oszczędzać prąd. Zamiast tego rachunki wzrosły, a światło w pustym salonie zapalało się co noc o 2:00.",
+    "solution": "Rodzina miała automatycznego robota sprzątającego, który miał zaprogramowane nocne odkurzanie. Robot jeżdżąc po salonie aktywował czujniki ruchu, zapalając wszystkie światła.",
+    "education": "Wiedza Tauron: Ustawiaj harmonogramy inteligentnych urządzeń w Smart Home tak, by ze sobą współpracowały i nie wykluczały się nawzajem."
+  },
+  {
+    "id": 33,
+    "title": "Zgubny latawiec",
+    "category": "Tauron",
+    "difficulty": "medium",
+    "story": "Ojciec chciał pomóc synowi i zdjąć jego latawiec z wysokiego drzewa za pomocą długiej rurki namiotowej. Chwilę później cała ulica pogrążyła się w absolutnych ciemnościach.",
+    "solution": "Drzewo rosło zbyt blisko napowietrznych linii energetycznych. Aluminiowa rurka wywołała potężne zwarcie, które wyrzuciło bezpieczniki na transformatorze zasilającym całą okolicę.",
+    "education": "Wiedza Tauron: Zachowaj bezpieczną odległość od infrastruktury energetycznej. Używanie metalowych przedmiotów w pobliżu linii wysokiego napięcia grozi śmiertelnym porażeniem."
+  },
+  {
+    "id": 34,
+    "title": "Lodowy złodziej",
+    "category": "Tauron",
+    "difficulty": "hard",
+    "story": "Kasia kupiła supernowoczesną, najbardziej energooszczędną lodówkę na rynku, ale jej zużycie prądu w kuchni drastycznie skoczyło do góry. Urządzenie było w 100% sprawne.",
+    "solution": "Kasia wstawiła nową lodówkę we wnękę tuż obok rozgrzanego kaloryfera. Brak wentylacji i ciepło sprawiały, że agregat pracował bez przerwy na najwyższych obrotach.",
+    "education": "Wiedza Tauron: Lodówka potrzebuje przestrzeni z tyłu do oddawania ciepła i powinna stać z dala od grzejników, inaczej będzie pobierać mnóstwo prądu."
+  },
+  {
+    "id": 35,
+    "title": "Tajemnica taniego prania",
+    "category": "Tauron",
+    "difficulty": "hard",
+    "story": "Dwie sąsiadki mają takie same domy i takie same pralki. Piorą dokładnie tyle samo ubrań w tygodniu. Jednak jedna z nich płaci za prąd używany do prania znacznie mniej.",
+    "solution": "Sprytna sąsiadka korzysta z innej taryfy (np. G12). Ustawia pralkę i zmywarkę tak, by włączały się w nocy lub w weekendy, kiedy prąd jest znacznie tańszy.",
+    "education": "Wiedza Tauron: Wybór odpowiedniej taryfy (np. nocnej lub weekendowej) to świetny sposób na oszczędności, jeśli potrafisz zaplanować działanie domowych sprzętów."
+  },
+  {
+    "id": 37,
+    "title": "Magiczna lodówka",
+    "category": "Tauron",
+    "difficulty": "easy",
+    "story": "Rodzina Nowaków wyrzuciła swoją starą, malutką lodówkę i kupiła nową, gigantyczną, dwudrzwiową chłodziarkę. Byli pewni, że przez ten wielki sprzęt ich rachunki za prąd mocno wzrosną. Stało się jednak dokładnie odwrotnie.",
+    "solution": "Stara, mała lodówka była bardzo zepsuta i mało wydajna, przez co pożerała mnóstwo prądu. Nowa, ogromna lodówka to nowoczesny sprzęt w bardzo wysokiej klasie energetycznej, który do chłodzenia potrzebuje znacznie mniej energii.",
+    "education": "Wiedza Tauron: Zwracanie uwagi na etykiety energetyczne (od A do G) przy zakupie sprzętu AGD to klucz do oszczędności. Czasem wymiana starego, prądożernego sprzętu potrafi zauważalnie obniżyć domowe rachunki."
   }
 ]

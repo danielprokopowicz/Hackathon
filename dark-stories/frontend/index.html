@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mystery Solver - Hackathon Edition</title>
+  <title>Rozwikłaj.To - Hackathon Edition</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -11,7 +11,7 @@
   <style>
     /* Główny nagłówek w kolorze PKO BP */
     .site-header { 
-        background: #003399 !important; 
+        background: #014188 !important; 
         border-bottom: 2px solid #002266;
     }
     
@@ -24,19 +24,19 @@
     .cat-btn:hover { opacity: 1; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
     
     /* Kolory przycisków generatora */
-    .cat-klasyczne { background: #e00404; }
-    .cat-pko { background: #003399; }
+    .cat-klasyczne { background: #e4202c; }
+    .cat-pko { background: #014188; }
     .cat-tauron { background: #FF0090; }
     
     /* Etykiety na kartach */
-    .badge-klasyczne { background: #e00404; color: white; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; margin-bottom: 10px; display: inline-block; font-weight: bold; text-transform: uppercase;}
-    .badge-pko { background: #003399; color: white; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; margin-bottom: 10px; display: inline-block; font-weight: bold; text-transform: uppercase;}
+    .badge-klasyczne { background: #e4202c; color: white; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; margin-bottom: 10px; display: inline-block; font-weight: bold; text-transform: uppercase;}
+    .badge-pko { background: #014188; color: white; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; margin-bottom: 10px; display: inline-block; font-weight: bold; text-transform: uppercase;}
     .badge-tauron { background: #FF0090; color: white; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; margin-bottom: 10px; display: inline-block; font-weight: bold; text-transform: uppercase;}
     
     /* Box rozwiązania i Box edukacyjny */
-    .solution-box { margin-top: 15px; padding: 15px; background: #f9f9f9; border-left: 4px solid #003399; border-radius: 4px; }
-    .edu-box { margin-top: 15px; padding: 15px; background: #e0f2fe; border-left: 4px solid #003399; border-radius: 4px; display: flex; flex-direction: column; gap: 8px;}
-    .edu-box h4 { color: #003399; margin: 0; display: flex; align-items: center; gap: 6px; font-size: 0.95rem; }
+    .solution-box { margin-top: 15px; padding: 15px; background: #f9f9f9; border-left: 4px solid #014188; border-radius: 4px; }
+    .edu-box { margin-top: 15px; padding: 15px; background: #e0f2fe; border-left: 4px solid #014188; border-radius: 4px; display: flex; flex-direction: column; gap: 8px;}
+    .edu-box h4 { color: #014188; margin: 0; display: flex; align-items: center; gap: 6px; font-size: 0.95rem; }
     .edu-box p { margin: 0; color: #1e293b; font-size: 0.9rem; line-height: 1.5; }
 
     /* Układ dla dwóch rzędów filtrów */
@@ -50,15 +50,30 @@
     .filter-tabs { margin-bottom: 0 !important; }
 
     /* Kolory aktywnych filtrów - Kategorie */
-    #catTabs .tab[data-cat="Klasyczne"].active { background: #e00404; border-color: #e00404; color: white; }
-    #catTabs .tab[data-cat="PKO Bank Polski"].active { background: #003399; border-color: #003399; color: white; }
+    #catTabs .tab[data-cat="Klasyczne"].active { background: #e4202c; border-color: #e4202c; color: white; }
+    #catTabs .tab[data-cat="PKO Bank Polski"].active { background: #014188; border-color: #014188; color: white; }
     #catTabs .tab[data-cat="Tauron"].active { background: #FF0090; border-color: #FF0090; color: white; }
 
     /* Kolory aktywnych filtrów - Poziom Trudności */
     #diffTabs .tab[data-diff="easy"].active { background: #2d7a4f; border-color: #2d7a4f; color: white; }
     #diffTabs .tab[data-diff="medium"].active { background: #c4891a; border-color: #c4891a; color: white; }
-    #diffTabs .tab[data-diff="hard"].active { background: #e00404; border-color: #e00404; color: white; }
+    #diffTabs .tab[data-diff="hard"].active { background: #950408; border-color: #950408; color: white; }
 
+    .story-card p.story-preview {
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        margin: 0;
+        transition: max-height 0.4s ease, opacity 0.4s ease, margin-top 0.4s ease;
+        font-size: 0.9rem;
+        color: #555;
+    }
+    
+    .story-card:hover p.story-preview {
+        max-height: 200px; /* Zapas miejsca na tekst */
+        opacity: 1;
+        margin-top: 12px;
+    }
   </style>
 </head>
 <body>
@@ -68,8 +83,8 @@
       <header class="site-header">
         <div class="header-row">
           <div class="header-inner">
-            <h1>Dark Stories</h1>
-            <p>Zadawaj pytania z odpowiedzią <em>Tak</em> lub <em>Nie</em>. Rozwikłaj zagadkę.</p>
+            <h1>Rozwikłaj.To</h1>
+            <p>Zadawaj pytania, łącz fakty i odkryj <em>prawdziwą historię</em>.</p>
           </div>
           <div class="header-mode-toggle">
             <div class="mode-pill">
@@ -144,7 +159,7 @@
             <button class="reveal-btn" id="btn-show" onclick="toggleRozwiazanie()">Pokaż rozwiązanie</button>
 
             <div id="rozwiazanie-box" class="solution-box" style="display: none;">
-                <strong style="color: #003399;">Prawdziwa historia:</strong><br>
+                <strong style="color: #014188;">Prawdziwa historia:</strong><br>
                 <span id="gameSolution" style="display: block; margin-bottom: 15px;"></span>
                 
                 <div class="edu-box" id="eduBox">
@@ -269,7 +284,7 @@
                     <span class="badge ${classDiff}">${translatedDiff}</span>
                 </div>
                 <h3>${story.title}</h3>
-                <p>${story.story}</p>
+                <p class="story-preview">${story.story}</p>
             `;
             card.onclick = () => openGame(story);
             grid.appendChild(card);

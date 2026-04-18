@@ -80,43 +80,46 @@ def ask_question(req: QuestionRequest):
 @app.post("/api/generate")
 def generate_story(req: GenerateRequest):
     if req.category == "PKO Bank Polski":
-        kontekst = "Stwórz zagadkę o edukacji finansowej, bezpieczeństwie w sieci (np. phishing), oszczędzaniu lub aplikacji mobilnej. Rozwiązanie ma pokazywać mądrą decyzję finansową."
+        kontekst = "Temat: cyberbezpieczeństwo (np. spoofing, phishing), oszczędzanie lub płatności. Ułóż to w formie zagadki."
     elif req.category == "Tauron":
-        kontekst = "Stwórz zagadkę o czystej energii, fotowoltaice, oszczędzaniu prądu lub innowacjach Taurona."
+        kontekst = "Temat: energia elektryczna, fotowoltaika, oszczędzanie prądu lub dziwna sytuacja z urządzeniami elektrycznymi."
     else:
-        kontekst = "Stwórz mroczną, zaskakującą zagadkę w stylu klasycznych 'Czarnych Historii'."
+        kontekst = "Temat: klasyczna mroczna, absurdalna lub makabryczna sytuacja."
 
-    # Znacznie wzmocniony prompt wymuszający czysty JSON
+    # Nowy, rygorystyczny prompt wymuszający styl "Czarnych Historii"
     prompt = (
+        f"Jesteś mistrzem gry 'Czarne Historie' (Dark Stories). Stwórz nową zagadkę na myślenie lateralne.\n"
         f"{kontekst}\n"
-        f"Poziom trudności: {req.difficulty}\n"
+        f"Poziom trudności: {req.difficulty}\n\n"
+        "WYMOGI STYLU (BARDZO WAŻNE):\n"
+        "1. Pole 'story' (Zarys) MUSI być ekstremalnie krótkie (max 2-3 zdania). Ma opisywać dziwną, paradoksalną, szokującą lub pozornie nielogiczną sytuację finałową.\n"
+        "2. To NIE MOŻE być klasyczna sprawa detektywistyczna (nie pisz o detektywach, śladach, szukaniu poszlak).\n"
+        "3. Pole 'solution' (Rozwiązanie) ma logicznie, ale zaskakująco wyjaśniać, jak doszło do sytuacji z zarysu.\n"
+        "4. Pole 'education' to jedna krótka ciekawostka edukacyjna związana z tematem.\n\n"
         "Zwróć wynik WYŁĄCZNIE jako czysty, poprawny obiekt JSON. "
         "Nie dodawaj żadnego tekstu przed ani po JSON-ie. "
         "Nie używaj znaczników kodu (np. ```json). "
         "Użyj dokładnie tych kluczy:\n"
         "{\n"
-        '  "title": "Tytuł historii",\n'
+        '  "title": "Tytuł",\n'
         '  "difficulty": "easy | medium | hard",\n'
-        '  "category": "Kategoria",\n'
-        '  "story": "Krótki zarys historii",\n'
-        '  "solution": "Logiczne rozwiązanie",\n'
-        '  "education": "Cenna pigułka wiedzy związana z zagadką"\n'
+        f'  "category": "{req.category}",\n'
+        '  "story": "Zarys historii (tylko 2-3 zdania paradoksu)",\n'
+        '  "solution": "Zaskakujące, ale logiczne wyjaśnienie",\n'
+        '  "education": "Krótka pigułka wiedzy"\n'
         "}"
     )
 
     try:
         response = client.models.generate_content(
-            model=GEMINI_MODEL, # Używamy głównego modelu Gemma
+            model=GEMINI_MODEL,
             contents=prompt,
             config=types.GenerateContentConfig(
-                temperature=0.7 # Odrobinę kreatywności, ale zachowaj strukturę
-                # Usunęliśmy response_mime_type
+                temperature=0.7 
             )
         )
         
-        # Agresywne czyszczenie odpowiedzi
         text = response.text.strip()
-        # Usuń potencjalne znaczniki markdown (nawet jeśli prosiliśmy by ich nie było)
         if text.startswith("```json"):
             text = text[7:]
         if text.startswith("```"):
@@ -131,10 +134,8 @@ def generate_story(req: GenerateRequest):
         return data
 
     except Exception as e:
-        # Przechwycenie błędu, jeśli odpowiedź nie jest poprawnym JSONem
         print(f"Błąd generowania JSON: {e}")
-        print(f"Odpowiedź modelu: {response.text if 'response' in locals() else 'Brak odpowiedzi'}")
-        raise HTTPException(status_code=500, detail="Nie udało się wygenerować poprawnego formatu historii. Spróbuj ponownie.")
+        raise HTTPException(status_code=500, detail="Nie udało się wygenerować historii. Spróbuj ponownie.")
 
 frontend_path = Path(__file__).parent.parent / "frontend"
 app.mount("/static", StaticFiles(directory=str(frontend_path / "static")), name="static")

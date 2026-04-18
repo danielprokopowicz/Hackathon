@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dark Stories</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+  <div id="app">
+
+    <!-- LIST VIEW -->
+    <div id="listView" class="view active">
+      <header class="site-header">
+        <div class="header-inner">
+          <h1>Dark Stories</h1>
+          <p>Zadawaj pytania z odpowiedzią <em>Tak</em> lub <em>Nie</em>. Rozwikłaj zagadkę.</p>
+        </div>
+      </header>
+
+      <main class="list-main">
+        <div class="filter-tabs" id="filterTabs">
+          <button class="tab active" data-filter="all">Wszystkie</button>
+          <button class="tab" data-filter="easy">Łatwe</button>
+          <button class="tab" data-filter="medium">Średnie</button>
+          <button class="tab" data-filter="hard">Trudne</button>
+        </div>
+
+        <div class="stories-grid" id="storiesGrid">
+          <div class="loading-state">Ładowanie historyjek...</div>
+        </div>
+
+        <div class="generate-section">
+          <p class="generate-label">✦ Wygeneruj historyjkę przez AI</p>
+          <div class="generate-buttons">
+            <button class="gen-btn gen-dark" onclick="generateRandom('dark')">
+              <span class="gen-icon">🌑</span>
+              <span class="gen-title">Mroczne historie</span>
+              <span class="gen-sub">Klasyczny Dark Stories</span>
+            </button>
+            <button class="gen-btn gen-pko" onclick="generateRandom('pko')">
+              <span class="gen-icon">🎮</span>
+              <span class="gen-title">PKO XP Gaming</span>
+              <span class="gen-sub">Świat gier i esportu</span>
+            </button>
+            <button class="gen-btn gen-tauron" onclick="generateRandom('tauron')">
+              <span class="gen-icon">⚡</span>
+              <span class="gen-title">Tauron AI</span>
+              <span class="gen-sub">Energia i technologia</span>
+            </button>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- GAME VIEW -->
+    <div id="gameView" class="view">
+      <div class="game-container">
+        <button class="back-btn" id="backBtn">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Powrót do listy
+        </button>
+
+        <div class="game-layout">
+          <!-- LEFT: Story Panel -->
+          <div class="story-panel">
+            <span class="badge" id="gameBadge"></span>
+            <h2 id="gameTitle"></h2>
+            <p class="story-text" id="gameStory"></p>
+
+            <button class="reveal-btn" id="revealBtn">Pokaż rozwiązanie</button>
+            <div class="solution-box" id="solutionBox"></div>
+          </div>
+
+          <!-- RIGHT: Q&A Panel -->
+          <div class="qa-panel">
+            <div class="qa-header">
+              <div class="qa-header-top">
+                <div>
+                  <h3>Zadaj pytanie</h3>
+                  <p>AI odpowie <strong>Tak</strong>, <strong>Nie</strong> lub <strong>Nie ma to znaczenia</strong></p>
+                </div>
+                <button class="hint-btn" id="hintBtn">
+                  <span class="hint-icon">💡</span>
+                  <span id="hintLabel">Podpowiedź</span>
+                  <span class="hint-count" id="hintCount"></span>
+                </button>
+              </div>
+            </div>
+
+            <div class="messages" id="messages">
+              <div class="empty-state">
+                <span>Zacznij zadawać pytania, aby rozwikłać zagadkę</span>
+              </div>
+            </div>
+
+            <div class="input-area">
+              <div class="input-row">
+                <input
+                  type="text"
+                  id="questionInput"
+                  placeholder="Czy ofiara znała sprawcę?"
+                  autocomplete="off"
+                />
+                <button id="askBtn">Zapytaj</button>
+              </div>
+              <div class="input-footer">
+                <p class="input-hint">Wciskaj Enter lub kliknij Zapytaj</p>
+                <button class="giveup-btn" id="giveUpBtn">Poddaj się</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

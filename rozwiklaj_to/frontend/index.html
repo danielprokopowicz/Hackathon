@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rozwikłaj.To - Hackathon Edition</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <style>
+    /* Główny nagłówek w kolorze PKO BP */
+    .site-header { 
+        background: #014188 !important; 
+        border-bottom: 2px solid #002266;
+    }
+    
+    /* Style dla kategorii Hackathonu */
+    .generator-panel { background: #ffffff; padding: 30px; border-radius: 12px; margin-top: 30px; text-align: center; border: 1px solid #eaeaea; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+    .generator-panel h3 { color: #1a1a1a; font-weight: 600; margin-bottom: 5px; }
+    .generator-panel p { font-size: 0.9rem; color: #666; margin-bottom: 20px; }
+    .btn-group { display: flex; gap: 12px; justify-content: center; margin-top: 15px; flex-wrap: wrap; }
+    .cat-btn { padding: 12px 24px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; opacity: 0.9; color: white; font-size: 0.95rem; }
+    .cat-btn:hover { opacity: 1; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+    
+    /* Kolory przycisków generatora */
+    .cat-klasyczne { background: #e4202c; }
+    .cat-pko { background: #014188; }
+    .cat-tauron { background: #FF0090; }
+    
+    /* Etykiety na kartach */
+    .badge-klasyczne { background: #e4202c; color: white; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; margin-bottom: 10px; display: inline-block; font-weight: bold; text-transform: uppercase;}
+    .badge-pko { background: #014188; color: white; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; margin-bottom: 10px; display: inline-block; font-weight: bold; text-transform: uppercase;}
+    .badge-tauron { background: #FF0090; color: white; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; margin-bottom: 10px; display: inline-block; font-weight: bold; text-transform: uppercase;}
+    
+    /* Box rozwiązania i Box edukacyjny */
+    .solution-box { margin-top: 15px; padding: 15px; background: #f9f9f9; border-left: 4px solid #014188; border-radius: 4px; }
+    .edu-box { margin-top: 15px; padding: 15px; background: #e0f2fe; border-left: 4px solid #014188; border-radius: 4px; display: flex; flex-direction: column; gap: 8px;}
+    .edu-box h4 { color: #014188; margin: 0; display: flex; align-items: center; gap: 6px; font-size: 0.95rem; }
+    .edu-box p { margin: 0; color: #1e293b; font-size: 0.9rem; line-height: 1.5; }
+
+    /* Układ dla dwóch rzędów filtrów */
+    .filters-container {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+    .filter-tabs { margin-bottom: 0 !important; }
+
+    /* Kolory aktywnych filtrów - Kategorie */
+    #catTabs .tab[data-cat="Klasyczne"].active { background: #e4202c; border-color: #e4202c; color: white; }
+    #catTabs .tab[data-cat="PKO Bank Polski"].active { background: #014188; border-color: #014188; color: white; }
+    #catTabs .tab[data-cat="Tauron"].active { background: #FF0090; border-color: #FF0090; color: white; }
+
+    /* Kolory aktywnych filtrów - Poziom Trudności */
+    #diffTabs .tab[data-diff="easy"].active { background: #2d7a4f; border-color: #2d7a4f; color: white; }
+    #diffTabs .tab[data-diff="medium"].active { background: #c4891a; border-color: #c4891a; color: white; }
+    #diffTabs .tab[data-diff="hard"].active { background: #950408; border-color: #950408; color: white; }
+
+    .story-card {
+        background: transparent !important;
+        padding: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        perspective: 1000px; 
+        height: 220px; 
+    }
+
+    .flip-card-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+        transform-style: preserve-3d;
+    }
+
+    .story-card:hover .flip-card-inner {
+        transform: rotateY(180deg); 
+    }
+
+    .flip-card-front, .flip-card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden; 
+        border-radius: 12px;
+        padding: 20px;
+        background: #ffffff;
+        border: 1px solid #eaeaea;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .flip-card-back {
+        transform: rotateY(180deg);
+        background: #f8fafc;
+        border-left: 4px solid #003399; 
+    }
+
+    .flip-card-back p {
+        font-size: 0.9rem;
+        color: #333;
+        margin: 0;
+        overflow-y: auto; 
+        max-height: 130px;
+        padding-right: 5px;
+        line-height: 1.5;
+    }
+
+    .flip-card-back p::-webkit-scrollbar { width: 4px; }
+    .flip-card-back p::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+
+    .tab {
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+        position: relative; 
+    }
+
+    .tab:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        z-index: 10; 
+    }
+    
+    .tab.active:hover {
+        transform: none;
+        box-shadow: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+
+    <div id="listView" class="view active">
+      <header class="site-header">
+        <div class="header-row">
+          <div class="header-inner">
+            <h1>Rozwikłaj.To</h1>
+            <p>Zadawaj pytania, łącz fakty i odkryj <em>prawdziwą historię</em>.</p>
+          </div>
+          <div class="header-mode-toggle">
+            <div class="mode-pill">
+              <button class="tab active" id="modeTileCooperation" onclick="setMode('cooperation')">Współpraca</button>
+              <button class="tab" id="modeTileCompetition" onclick="setMode('competition')">Rywalizacja</button>
+            </div>
+            <p class="mode-hint-competition" id="modeHintCompetition">Do 8 graczy – kto pierwszy zgadnie</p>
+          </div>
+        </div>
+      </header>
+
+      <main class="list-main">
+
+        <div id="playerSetupInline" class="player-setup-inline" style="display:none;">
+          <h4 class="player-setup-heading">Gracze <span id="playerCount" class="player-count"></span></h4>
+          <div class="player-input-wrap">
+            <input id="playerNameInput" type="text" placeholder="Imię gracza..." maxlength="20"
+              onkeypress="if(event.key==='Enter') addPlayer()" />
+            <button class="add-player-btn" onclick="addPlayer()">Dodaj</button>
+          </div>
+          <div id="playerList" class="player-list"></div>
+          <p class="player-hint">Dodaj graczy, a potem kliknij wybraną historię, aby rozpocząć</p>
+        </div>
+
+        <div class="filters-container">
+            <div class="filter-tabs" id="catTabs">
+              <button class="tab active" data-cat="all">Wszystkie kategorie</button>
+              <button class="tab" data-cat="Klasyczne">Klasyczne</button>
+              <button class="tab" data-cat="PKO Bank Polski">PKO BP</button>
+              <button class="tab" data-cat="Tauron">Tauron</button>
+            </div>
+            
+            <div class="filter-tabs" id="diffTabs">
+              <button class="tab active" data-diff="all">Wszystkie poziomy</button>
+              <button class="tab" data-diff="easy">Łatwe</button>
+              <button class="tab" data-diff="medium">Średnie</button>
+              <button class="tab" data-diff="hard">Trudne</button>
+            </div>
+        </div>
+
+        <div class="stories-grid" id="storiesGrid">
+          <div class="loading-state">Ładowanie historyjek...</div>
+        </div>
+
+        <div class="generator-panel">
+            <h3>✦ Wygeneruj nową sprawę przez AI ✦</h3>
+            <p>Wybierz kategorię i pozwól sztucznej inteligencji stworzyć unikalną historię</p>
+            <div class="btn-group">
+                <button class="cat-btn cat-klasyczne" onclick="generateStory('Klasyczne', 'medium')">💀 Klasyczna Mroczna</button>
+                <button class="cat-btn cat-pko" onclick="generateStory('PKO Bank Polski', 'medium')">🏦 Sukces PKO BP</button>
+                <button class="cat-btn cat-tauron" onclick="generateStory('Tauron', 'medium')">⚡ Energia Tauron</button>
+            </div>
+        </div>
+      </main>
+    </div>
+
+    <div id="gameView" class="view">
+      <div class="game-container">
+        <button class="back-btn" id="backBtn" onclick="showListView()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Powrót do listy
+        </button>
+
+        <div class="game-layout">
+          <div class="story-panel">
+            <span id="catBadge"></span>
+            <h2 id="gameTitle"></h2>
+            <p class="story-text" id="gameStory"></p>
+
+            <button class="reveal-btn" id="btn-show" onclick="toggleRozwiazanie()">Pokaż rozwiązanie</button>
+
+            <div id="rozwiazanie-box" class="solution-box" style="display: none;">
+                <strong style="color: #014188;">Prawdziwa historia:</strong><br>
+                <span id="gameSolution" style="display: block; margin-bottom: 15px;"></span>
+                
+                <div class="edu-box" id="eduBox">
+                    <h4>💡 Pigułka Wiedzy</h4>
+                    <p id="gameEducation"></p>
+                </div>
+            </div>
+          </div>
+
+          <div class="qa-panel">
+            <div class="qa-header">
+              <h3>Zadaj pytanie</h3>
+              <p>AI odpowie <strong>Tak</strong>, <strong>Nie</strong> lub <strong>Nie ma znaczenia</strong></p>
+            </div>
+
+            <div id="turnIndicator" class="turn-indicator" style="display:none;"></div>
+
+            <div class="messages" id="messages">
+              <div class="empty-state">
+                <span>Zacznij zadawać pytania, aby rozwikłać zagadkę</span>
+              </div>
+            </div>
+
+            <div class="input-area">
+              <div class="input-row">
+                <input type="text" id="questionInput" placeholder="Czy ofiara..." autocomplete="off" onkeypress="if(event.key==='Enter') askQuestion()" />
+                <button id="askBtn" onclick="askQuestion()">Zapytaj</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let currentStories      = [];
+    let activeStory         = null;
+    let gameMode            = 'cooperation'; 
+    let players             = [];
+    let currentPlayerIndex  = 0;
+    let turnTimer           = null;
+    let turnTimeLeft        = 0;
+    let firstQuestionAsked  = false;
+    
+    let activeCatFilter     = 'all';
+    let activeDiffFilter    = 'all';
+
+    const diffTextPl = {
+        'easy':'ŁATWE','medium':'ŚREDNIE','hard':'TRUDNE',
+        'Łatwe':'ŁATWE','Średnie':'ŚREDNIE','Trudne':'TRUDNE'
+    };
+    const diffClassMap = {
+        'easy':'easy','medium':'medium','hard':'hard',
+        'Łatwe':'easy','Średnie':'medium','Trudne':'hard'
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchStories();
+        
+        document.querySelectorAll('#catTabs .tab').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                document.querySelectorAll('#catTabs .tab').forEach(t => t.classList.remove('active'));
+                e.target.classList.add('active');
+                activeCatFilter = e.target.dataset.cat;
+                renderStories();
+            });
+        });
+
+        document.querySelectorAll('#diffTabs .tab').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                document.querySelectorAll('#diffTabs .tab').forEach(t => t.classList.remove('active'));
+                e.target.classList.add('active');
+                activeDiffFilter = e.target.dataset.diff;
+                renderStories();
+            });
+        });
+    });
+
+    async function fetchStories() {
+        try {
+            const res = await fetch('/api/stories?t=' + Date.now());
+            currentStories = await res.json();
+            renderStories();
+        } catch {
+            document.getElementById('storiesGrid').innerHTML = '<div class="loading-state">Błąd ładowania.</div>';
+        }
+    }
+
+    function renderStories() {
+        const grid = document.getElementById('storiesGrid');
+        grid.innerHTML = '';
+        
+        const filtered = currentStories.filter(s => {
+            const matchCat = (activeCatFilter === 'all') || (s.category === activeCatFilter);
+            let matchDiff = false;
+            if (activeDiffFilter === 'all') matchDiff = true;
+            else if (s.difficulty === activeDiffFilter) matchDiff = true;
+            else if (activeDiffFilter === 'easy'   && s.difficulty === 'Łatwe')   matchDiff = true;
+            else if (activeDiffFilter === 'medium' && s.difficulty === 'Średnie') matchDiff = true;
+            else if (activeDiffFilter === 'hard'   && s.difficulty === 'Trudne')  matchDiff = true;
+            return matchCat && matchDiff;
+        });
+        
+        if (filtered.length === 0) {
+            grid.innerHTML = '<div class="loading-state">Brak spraw spełniających te kryteria.</div>';
+            return;
+        }
+
+        filtered.forEach(story => {
+            const card = document.createElement('div');
+            card.className = 'story-card';
+            let catClass = 'badge-klasyczne';
+            if (story.category === 'PKO Bank Polski') catClass = 'badge-pko';
+            if (story.category === 'Tauron')          catClass = 'badge-tauron';
+            const translatedDiff = diffTextPl[story.difficulty]  || story.difficulty;
+            const classDiff      = diffClassMap[story.difficulty] || 'medium';
+            
+            card.innerHTML = `
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+                            <span class="${catClass}">${story.category || 'Klasyczne'}</span>
+                            <span class="badge ${classDiff}">${translatedDiff}</span>
+                        </div>
+                        <h3 style="font-size: 1.2rem; text-align: center; margin: auto 0;">${story.title}</h3>
+                        <div style="margin-top:auto; font-size:0.85rem; color:#888; text-align:center;">
+                            Najedź, aby przeczytać ⤻
+                        </div>
+                    </div>
+                    
+                    <div class="flip-card-back">
+                        <h4 style="margin-bottom: 8px; font-size: 0.95rem; color: #1a1a1a;">Zarys historii:</h4>
+                        <p>${story.story}</p>
+                        <div style="margin-top:auto; font-size:0.85rem; color:#003399; text-align:center; font-weight:bold;">
+                            Kliknij, aby zagrać!
+                        </div>
+                    </div>
+                </div>
+            `;
+            card.onclick = () => openGame(story);
+            grid.appendChild(card);
+        });
+    }
+
+    async function generateStory(category, difficulty) {
+        const panel = document.querySelector('.generator-panel h3');
+        const oldText = panel.innerText;
+        panel.innerText = "⏳ Generowanie...";
+        try {
+            const res = await fetch('/api/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ category, difficulty })
+            });
+            openGame(await res.json());
+        } catch { alert("Błąd AI."); }
+        finally   { panel.innerText = oldText; }
+    }
+
+    function setMode(mode) {
+        gameMode = mode;
+        document.getElementById('modeTileCooperation').classList.toggle('active', mode === 'cooperation');
+        document.getElementById('modeTileCompetition').classList.toggle('active', mode === 'competition');
+        const setup = document.getElementById('playerSetupInline');
+        setup.style.display = mode === 'competition' ? 'block' : 'none';
+        const hint = document.getElementById('modeHintCompetition');
+        hint.style.display = mode === 'competition' ? 'block' : 'none';
+        if (mode === 'competition') document.getElementById('playerNameInput').focus();
+    }
+
+    function addPlayer() {
+        const input = document.getElementById('playerNameInput');
+        const name  = input.value.trim();
+        if (!name || players.length >= 8) return;
+        if (players.includes(name)) { input.select(); return; }
+        players.push(name);
+        input.value = '';
+        input.focus();
+        renderPlayerList();
+    }
+
+    function removePlayer(index) {
+        players.splice(index, 1);
+        renderPlayerList();
+    }
+
+    function renderPlayerList() {
+        const list = document.getElementById('playerList');
+        list.innerHTML = '';
+        players.forEach((name, i) => {
+            const chip = document.createElement('div');
+            chip.className = 'player-chip';
+            chip.innerHTML = `<span>${name}</span>
+                <button class="player-chip-remove" onclick="removePlayer(${i})" title="Usuń">×</button>`;
+            list.appendChild(chip);
+        });
+        const maxed = players.length >= 8;
+        document.querySelector('.add-player-btn').disabled  = maxed;
+        document.getElementById('playerNameInput').disabled = maxed;
+        const countEl = document.getElementById('playerCount');
+        if (countEl) countEl.textContent = players.length ? `${players.length}/8` : '';
+    }
+
+    function shufflePlayers() {
+        for (let i = players.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [players[i], players[j]] = [players[j], players[i]];
+        }
+    }
+
+    function clearTurnTimer() {
+        if (turnTimer) { clearInterval(turnTimer); turnTimer = null; }
+    }
+
+    function startTurnTimer() {
+        clearTurnTimer();
+        turnTimeLeft = firstQuestionAsked ? 30 : 45;
+        updateTurnIndicator();
+        turnTimer = setInterval(() => {
+            turnTimeLeft--;
+            updateTurnIndicator();
+            if (turnTimeLeft <= 0) skipTurn();
+        }, 1000);
+    }
+
+    function skipTurn() {
+        clearTurnTimer();
+        const skipped = players[currentPlayerIndex];
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+        firstQuestionAsked = true;
+        addMessage('System', `⏱ ${skipped} nie odpowiedział na czas — tura pominięta.`, 'ai-msg');
+        updateTurnIndicator();
+        startTurnTimer();
+    }
+
+    function openGame(storyData) {
+        if (gameMode === 'competition' && players.length === 0) {
+            const setup = document.getElementById('playerSetupInline');
+            setup.classList.add('shake');
+            setTimeout(() => setup.classList.remove('shake'), 500);
+            document.getElementById('playerNameInput').focus();
+            return;
+        }
+
+        clearTurnTimer();
+        if (gameMode === 'competition') shufflePlayers();
+        activeStory = storyData;
+        currentPlayerIndex = 0;
+        firstQuestionAsked = false;
+
+        document.getElementById('listView').classList.remove('active');
+        document.getElementById('gameView').classList.add('active');
+
+        document.getElementById('rozwiazanie-box').style.display = 'none';
+        document.getElementById('btn-show').innerText = "Pokaż rozwiązanie";
+        document.getElementById('questionInput').disabled = false;
+        document.getElementById('questionInput').dataset.won = '';
+        document.getElementById('askBtn').disabled = false;
+
+        document.getElementById('gameTitle').innerText    = storyData.title;
+        document.getElementById('gameStory').innerText    = storyData.story;
+        document.getElementById('gameSolution').innerText = storyData.solution || "⚠️ Odśwież stronę (Ctrl+F5).";
+
+        // Wstrzykiwanie tekstu edukacyjnego
+        const eduBox = document.getElementById('eduBox');
+        if (storyData.education) {
+            eduBox.style.display = 'flex';
+            document.getElementById('gameEducation').innerText = storyData.education;
+        } else {
+            eduBox.style.display = 'none';
+        }
+
+        const badge = document.getElementById('catBadge');
+        badge.innerText = storyData.category || 'Klasyczne';
+        badge.className = storyData.category === 'PKO Bank Polski' ? 'badge-pko'
+                        : storyData.category === 'Tauron'          ? 'badge-tauron'
+                        : 'badge-klasyczne';
+
+        document.getElementById('messages').innerHTML =
+            '<div class="empty-state"><span>Zacznij zadawać pytania, aby rozwikłać zagadkę</span></div>';
+        updateTurnIndicator();
+        if (gameMode === 'competition' && players.length > 0) startTurnTimer();
+    }
+
+    function updateTurnIndicator() {
+        const indicator = document.getElementById('turnIndicator');
+        if (gameMode === 'competition' && players.length > 0) {
+            indicator.style.display = 'block';
+            const name    = players[currentPlayerIndex];
+            const urgent  = turnTimer && turnTimeLeft <= 10;
+            const timerHtml = turnTimer
+                ? `<span class="turn-timer${urgent ? ' turn-timer-urgent' : ''}">${turnTimeLeft}s</span>`
+                : '';
+            indicator.innerHTML =
+            `<span class="turn-label">Tura gracza:</span>` +
+            `<span class="turn-name"> ${name} </span>` +
+            `<span class="turn-count">${currentPlayerIndex + 1} / ${players.length} &nbsp;&nbsp;</span>` +
+            timerHtml;
+        } else {
+            indicator.style.display = 'none';
+        }
+    }
+
+    function toggleRozwiazanie() {
+        const box = document.getElementById('rozwiazanie-box');
+        const btn = document.getElementById('btn-show');
+        if (box.style.display === 'none' || !box.style.display) {
+            box.style.display = 'block';
+            btn.innerText = "Ukryj rozwiązanie";
+        } else {
+            box.style.display = 'none';
+            btn.innerText = "Pokaż rozwiązanie";
+        }
+    }
+
+    function showListView() {
+        clearTurnTimer();
+        document.getElementById('gameView').classList.remove('active');
+        document.getElementById('listView').classList.add('active');
+    }
+
+    async function askQuestion() {
+        const input = document.getElementById('questionInput');
+        const q = input.value.trim();
+        if (!q) return;
+
+        clearTurnTimer();
+        const author = (gameMode === 'competition' && players.length > 0)
+            ? players[currentPlayerIndex] : 'Ty';
+
+        addMessage(author, q, 'user-msg');
+        input.value = '';
+        input.disabled = true;
+        document.getElementById('askBtn').disabled = true;
+
+        try {
+            const res = await fetch('/api/ask', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    story_id:   activeStory.id,
+                    question:   q,
+                    story_data: activeStory.id === 'random' ? activeStory : null
+                })
+            });
+            const data   = await res.json();
+            const answer = data.answer.trim();
+            addMessage('Sędzia', answer, 'ai-msg');
+
+            if (answer.toLowerCase().includes('zgadł')) {
+                if (gameMode === 'competition' && players.length > 0) {
+                    showWinner(players[currentPlayerIndex]);
+                } else {
+                    showWinner(); 
+                }
+                return;
+            }
+
+            if (gameMode === 'competition' && players.length > 0) {
+                firstQuestionAsked = true;
+                currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+                updateTurnIndicator();
+            }
+        } catch {
+            addMessage('System', 'Błąd połączenia.', 'ai-msg error');
+        } finally {
+            if (!document.getElementById('questionInput').dataset.won) {
+                input.disabled = false;
+                document.getElementById('askBtn').disabled = false;
+                input.focus();
+                if (gameMode === 'competition' && players.length > 0) startTurnTimer();
+            }
+        }
+    }
+
+    function showWinner(name) {
+        clearTurnTimer();
+        const container = document.getElementById('messages');
+        const banner = document.createElement('div');
+        banner.className = 'winner-banner';
+        
+        if (name) {
+            banner.innerHTML = `<h3>🏆 ${name} wygrywa!</h3><p>Zagadka rozwiązana! Gratulacje!</p>`;
+        } else {
+            banner.innerHTML = `<h3>🏆 WYGRALIŚCIE!</h3><p>Zagadka rozwiązana! Świetna robota zespołowa!</p>`;
+        }
+        
+        container.appendChild(banner);
+        container.scrollTop = container.scrollHeight;
+        document.getElementById('turnIndicator').style.display = 'none';
+        
+        // Blokada czatu
+        document.getElementById('questionInput').disabled = true;
+        document.getElementById('questionInput').dataset.won = '1';
+        document.getElementById('askBtn').disabled = true;
+
+        // Automatyczne odsłonięcie historii i Pigułki Wiedzy
+        document.getElementById('rozwiazanie-box').style.display = 'block';
+        document.getElementById('btn-show').innerText = "Ukryj rozwiązanie";
+    }
+
+    function addMessage(author, text, className) {
+        const container = document.getElementById('messages');
+        const empty = container.querySelector('.empty-state');
+        if (empty) empty.remove();
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `message ${className}`;
+        msgDiv.innerHTML = `<small style="opacity:0.5;display:block;font-size:10px;">${author}</small>${text}`;
+        container.appendChild(msgDiv);
+        container.scrollTop = container.scrollHeight;
+    }
+  </script>
+</body>
+</html>

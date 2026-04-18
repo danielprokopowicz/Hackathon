@@ -33,13 +33,34 @@
 
     <div id="listView" class="view active">
       <header class="site-header">
-        <div class="header-inner">
-          <h1>Dark Stories</h1>
-          <p>Zadawaj pytania z odpowiedzią <em>Tak</em> lub <em>Nie</em>. Rozwikłaj zagadkę.</p>
+        <div class="header-row">
+          <div class="header-inner">
+            <h1>Dark Stories</h1>
+            <p>Zadawaj pytania z odpowiedzią <em>Tak</em> lub <em>Nie</em>. Rozwikłaj zagadkę.</p>
+          </div>
+          <div class="header-mode-toggle">
+            <div class="mode-pill">
+              <button class="tab active" id="modeTileCooperation" onclick="setMode('cooperation')">Współpraca</button>
+              <button class="tab" id="modeTileCompetition" onclick="setMode('competition')">Rywalizacja</button>
+            </div>
+            <p class="mode-hint-competition" id="modeHintCompetition">Do 8 graczy – kto pierwszy zgadnie</p>
+          </div>
         </div>
       </header>
 
       <main class="list-main">
+
+<div id="playerSetupInline" class="player-setup-inline" style="display:none;">
+          <h4 class="player-setup-heading">Gracze <span id="playerCount" class="player-count"></span></h4>
+          <div class="player-input-wrap">
+            <input id="playerNameInput" type="text" placeholder="Imię gracza..." maxlength="20"
+              onkeypress="if(event.key==='Enter') addPlayer()" />
+            <button class="add-player-btn" onclick="addPlayer()">Dodaj</button>
+          </div>
+          <div id="playerList" class="player-list"></div>
+          <p class="player-hint">Dodaj graczy, a potem kliknij wybraną historię, aby rozpocząć</p>
+        </div>
+
         <div class="filter-tabs" id="filterTabs">
           <button class="tab active" data-filter="all">Wszystkie</button>
           <button class="tab" data-filter="easy">Łatwe</button>
@@ -79,7 +100,7 @@
             <p class="story-text" id="gameStory"></p>
 
             <button class="reveal-btn" id="btn-show" onclick="toggleRozwiazanie()">Pokaż rozwiązanie</button>
-            
+
             <div id="rozwiazanie-box" class="solution-box" style="display: none;">
                 <strong style="color: #b91c1c;">Prawdziwa historia:</strong><br>
                 <span id="gameSolution"></span>
@@ -91,6 +112,8 @@
               <h3>Zadaj pytanie</h3>
               <p>AI odpowie <strong>Tak</strong>, <strong>Nie</strong> lub <strong>Nie ma znaczenia</strong></p>
             </div>
+
+            <div id="turnIndicator" class="turn-indicator" style="display:none;"></div>
 
             <div class="messages" id="messages">
               <div class="empty-state">
@@ -112,33 +135,29 @@
   </div>
 
   <script>
-    let currentStories = [];
-    let activeStory = null;
+    let currentStories      = [];
+    let activeStory         = null;
+    let gameMode            = 'cooperation'; // 'cooperation' | 'competition'
+    let players             = [];
+    let currentPlayerIndex  = 0;
+    let turnTimer           = null;
+    let turnTimeLeft        = 0;
+    let firstQuestionAsked  = false;
 
-    // Słowniki do tłumaczenia poziomów trudności na polski z zachowaniem klas CSS
     const diffTextPl = {
-        'easy': 'ŁATWE',
-        'medium': 'ŚREDNIE',
-        'hard': 'TRUDNE',
-        'Łatwe': 'ŁATWE',
-        'Średnie': 'ŚREDNIE',
-        'Trudne': 'TRUDNE'
+        'easy':'ŁATWE','medium':'ŚREDNIE','hard':'TRUDNE',
+        'Łatwe':'ŁATWE','Średnie':'ŚREDNIE','Trudne':'TRUDNE'
     };
-    
     const diffClassMap = {
-        'easy': 'easy',
-        'medium': 'medium',
-        'hard': 'hard',
-        'Łatwe': 'easy',
-        'Średnie': 'medium',
-        'Trudne': 'hard'
+        'easy':'easy','medium':'medium','hard':'hard',
+        'Łatwe':'easy','Średnie':'medium','Trudne':'hard'
     };
 
     document.addEventListener('DOMContentLoaded', () => {
         fetchStories();
-        document.querySelectorAll('.tab').forEach(tab => {
+        document.querySelectorAll('#filterTabs .tab').forEach(tab => {
             tab.addEventListener('click', (e) => {
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('#filterTabs .tab').forEach(t => t.classList.remove('active'));
                 e.target.classList.add('active');
                 renderStories(e.target.dataset.filter);
             });
@@ -147,11 +166,10 @@
 
     async function fetchStories() {
         try {
-            // Dodano "?t=" na końcu, by zniszczyć cache przeglądarki
-            const res = await fetch('/api/stories?t=' + new Date().getTime());
+            const res = await fetch('/api/stories?t=' + Date.now());
             currentStories = await res.json();
             renderStories('all');
-        } catch (err) {
+        } catch {
             document.getElementById('storiesGrid').innerHTML = '<div class="loading-state">Błąd ładowania.</div>';
         }
     }
@@ -159,32 +177,24 @@
     function renderStories(filter) {
         const grid = document.getElementById('storiesGrid');
         grid.innerHTML = '';
-        
-        // Zabezpieczenie filtrów pod polskie nazwy (jesli z AI wpadnie polska)
         const filtered = currentStories.filter(s => {
             if (filter === 'all') return true;
             if (s.difficulty === filter) return true;
-            // Mapowanie wsteczne dla filtrów
-            if (filter === 'easy' && s.difficulty === 'Łatwe') return true;
+            if (filter === 'easy'   && s.difficulty === 'Łatwe')   return true;
             if (filter === 'medium' && s.difficulty === 'Średnie') return true;
-            if (filter === 'hard' && s.difficulty === 'Trudne') return true;
+            if (filter === 'hard'   && s.difficulty === 'Trudne')  return true;
             return false;
         });
-        
         filtered.forEach(story => {
             const card = document.createElement('div');
             card.className = 'story-card';
-            
             let catClass = 'badge-klasyczne';
-            if(story.category === 'PKO Bank Polski') catClass = 'badge-pko';
-            if(story.category === 'Tauron') catClass = 'badge-tauron';
-
-            // Tłumaczenie napisów na kartach
-            const translatedDiff = diffTextPl[story.difficulty] || story.difficulty;
-            const classDiff = diffClassMap[story.difficulty] || 'medium';
-
+            if (story.category === 'PKO Bank Polski') catClass = 'badge-pko';
+            if (story.category === 'Tauron')          catClass = 'badge-tauron';
+            const translatedDiff = diffTextPl[story.difficulty]  || story.difficulty;
+            const classDiff      = diffClassMap[story.difficulty] || 'medium';
             card.innerHTML = `
-                <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
                     <span class="${catClass}">${story.category || 'Klasyczne'}</span>
                     <span class="badge ${classDiff}">${translatedDiff}</span>
                 </div>
@@ -206,39 +216,152 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ category, difficulty })
             });
-            const newStory = await res.json();
-            openGame(newStory);
-        } catch (e) { alert("Błąd AI."); }
-        finally { panel.innerText = oldText; }
+            openGame(await res.json());
+        } catch { alert("Błąd AI."); }
+        finally   { panel.innerText = oldText; }
     }
 
+    // Ustawia tryb gry – toggle w headerze
+    function setMode(mode) {
+        gameMode = mode;
+        document.getElementById('modeTileCooperation').classList.toggle('active', mode === 'cooperation');
+        document.getElementById('modeTileCompetition').classList.toggle('active', mode === 'competition');
+        const setup = document.getElementById('playerSetupInline');
+        setup.style.display = mode === 'competition' ? 'block' : 'none';
+        const hint = document.getElementById('modeHintCompetition');
+        hint.style.display = mode === 'competition' ? 'block' : 'none';
+        if (mode === 'competition') document.getElementById('playerNameInput').focus();
+    }
+
+    function addPlayer() {
+        const input = document.getElementById('playerNameInput');
+        const name  = input.value.trim();
+        if (!name || players.length >= 8) return;
+        if (players.includes(name)) { input.select(); return; }
+        players.push(name);
+        input.value = '';
+        input.focus();
+        renderPlayerList();
+    }
+
+    function removePlayer(index) {
+        players.splice(index, 1);
+        renderPlayerList();
+    }
+
+    function renderPlayerList() {
+        const list = document.getElementById('playerList');
+        list.innerHTML = '';
+        players.forEach((name, i) => {
+            const chip = document.createElement('div');
+            chip.className = 'player-chip';
+            chip.innerHTML = `<span>${name}</span>
+                <button class="player-chip-remove" onclick="removePlayer(${i})" title="Usuń">×</button>`;
+            list.appendChild(chip);
+        });
+        const maxed = players.length >= 8;
+        document.querySelector('.add-player-btn').disabled  = maxed;
+        document.getElementById('playerNameInput').disabled = maxed;
+        const countEl = document.getElementById('playerCount');
+        if (countEl) countEl.textContent = players.length ? `${players.length}/8` : '';
+    }
+
+    function shufflePlayers() {
+        for (let i = players.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [players[i], players[j]] = [players[j], players[i]];
+        }
+    }
+
+    function clearTurnTimer() {
+        if (turnTimer) { clearInterval(turnTimer); turnTimer = null; }
+    }
+
+    function startTurnTimer() {
+        clearTurnTimer();
+        turnTimeLeft = firstQuestionAsked ? 30 : 45;
+        updateTurnIndicator();
+        turnTimer = setInterval(() => {
+            turnTimeLeft--;
+            updateTurnIndicator();
+            if (turnTimeLeft <= 0) skipTurn();
+        }, 1000);
+    }
+
+    function skipTurn() {
+        clearTurnTimer();
+        const skipped = players[currentPlayerIndex];
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+        firstQuestionAsked = true;
+        addMessage('System', `⏱ ${skipped} nie odpowiedział na czas — tura pominięta.`, 'ai-msg');
+        updateTurnIndicator();
+        startTurnTimer();
+    }
+
+    // Kliknięcie historii startuje grę w aktualnie wybranym trybie
     function openGame(storyData) {
+        if (gameMode === 'competition' && players.length === 0) {
+            const setup = document.getElementById('playerSetupInline');
+            setup.classList.add('shake');
+            setTimeout(() => setup.classList.remove('shake'), 500);
+            document.getElementById('playerNameInput').focus();
+            return;
+        }
+
+        clearTurnTimer();
+        if (gameMode === 'competition') shufflePlayers();
         activeStory = storyData;
+        currentPlayerIndex = 0;
+        firstQuestionAsked = false;
+
         document.getElementById('listView').classList.remove('active');
         document.getElementById('gameView').classList.add('active');
-        
-        // KULOODPORNE UKRYWANIE
+
         document.getElementById('rozwiazanie-box').style.display = 'none';
         document.getElementById('btn-show').innerText = "Pokaż rozwiązanie";
-        
-        document.getElementById('gameTitle').innerText = storyData.title;
-        document.getElementById('gameStory').innerText = storyData.story;
-        
-        // Zabezpieczenie przed brakiem danych z serwera
-        document.getElementById('gameSolution').innerText = storyData.solution || "⚠️ Przeglądarka zablokowała dane. Użyj skrótu Ctrl+F5 by odświeżyć pamięć strony.";
-        
+        document.getElementById('questionInput').disabled = false;
+        document.getElementById('questionInput').dataset.won = '';
+        document.getElementById('askBtn').disabled = false;
+
+        document.getElementById('gameTitle').innerText    = storyData.title;
+        document.getElementById('gameStory').innerText    = storyData.story;
+        document.getElementById('gameSolution').innerText = storyData.solution || "⚠️ Odśwież stronę (Ctrl+F5).";
+
         const badge = document.getElementById('catBadge');
         badge.innerText = storyData.category || 'Klasyczne';
-        badge.className = storyData.category === 'PKO Bank Polski' ? 'badge-pko' : (storyData.category === 'Tauron' ? 'badge-tauron' : 'badge-klasyczne');
-        document.getElementById('messages').innerHTML = '<div class="empty-state"><span>Zacznij zadawać pytania...</span></div>';
+        badge.className = storyData.category === 'PKO Bank Polski' ? 'badge-pko'
+                        : storyData.category === 'Tauron'          ? 'badge-tauron'
+                        : 'badge-klasyczne';
+
+        document.getElementById('messages').innerHTML =
+            '<div class="empty-state"><span>Zacznij zadawać pytania, aby rozwikłać zagadkę</span></div>';
+        updateTurnIndicator();
+        if (gameMode === 'competition' && players.length > 0) startTurnTimer();
     }
 
-    // KULOODPORNE POKAZYWANIE
+    function updateTurnIndicator() {
+        const indicator = document.getElementById('turnIndicator');
+        if (gameMode === 'competition' && players.length > 0) {
+            indicator.style.display = 'block';
+            const name    = players[currentPlayerIndex];
+            const urgent  = turnTimer && turnTimeLeft <= 10;
+            const timerHtml = turnTimer
+                ? `<span class="turn-timer${urgent ? ' turn-timer-urgent' : ''}">${turnTimeLeft}s</span>`
+                : '';
+            indicator.innerHTML =
+            `<span class="turn-label">Tura gracza:</span>` +
+            `<span class="turn-name"> ${name} </span>` +
+            `<span class="turn-count">${currentPlayerIndex + 1} / ${players.length} &nbsp;&nbsp;</span>` +
+            timerHtml;
+        } else {
+            indicator.style.display = 'none';
+        }
+    }
+
     function toggleRozwiazanie() {
         const box = document.getElementById('rozwiazanie-box');
         const btn = document.getElementById('btn-show');
-        
-        if (box.style.display === 'none' || box.style.display === '') {
+        if (box.style.display === 'none' || !box.style.display) {
             box.style.display = 'block';
             btn.innerText = "Ukryj rozwiązanie";
         } else {
@@ -248,6 +371,7 @@
     }
 
     function showListView() {
+        clearTurnTimer();
         document.getElementById('gameView').classList.remove('active');
         document.getElementById('listView').classList.add('active');
     }
@@ -257,17 +381,62 @@
         const q = input.value.trim();
         if (!q) return;
 
-        addMessage('Ty', q, 'user-msg');
+        clearTurnTimer();
+        const author = (gameMode === 'competition' && players.length > 0)
+            ? players[currentPlayerIndex] : 'Ty';
+
+        addMessage(author, q, 'user-msg');
         input.value = '';
+        input.disabled = true;
+        document.getElementById('askBtn').disabled = true;
+
         try {
             const res = await fetch('/api/ask', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ story_id: activeStory.id, question: q, story_data: activeStory.id === 'random' ? activeStory : null })
+                body: JSON.stringify({
+                    story_id:   activeStory.id,
+                    question:   q,
+                    story_data: activeStory.id === 'random' ? activeStory : null
+                })
             });
-            const data = await res.json();
-            addMessage('Sędzia', data.answer, 'ai-msg');
-        } catch (e) { addMessage('System', 'Błąd.', 'ai-msg error'); }
+            const data   = await res.json();
+            const answer = data.answer.trim();
+            addMessage('Sędzia', answer, 'ai-msg');
+
+            if (gameMode === 'competition' && players.length > 0) {
+                if (answer.toLowerCase().includes('zgadł')) {
+                    showWinner(players[currentPlayerIndex]);
+                    return;
+                }
+                firstQuestionAsked = true;
+                currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+                updateTurnIndicator();
+            }
+        } catch {
+            addMessage('System', 'Błąd połączenia.', 'ai-msg error');
+        } finally {
+            if (!document.getElementById('questionInput').dataset.won) {
+                input.disabled = false;
+                document.getElementById('askBtn').disabled = false;
+                input.focus();
+                if (gameMode === 'competition' && players.length > 0) startTurnTimer();
+            }
+        }
+    }
+
+    function showWinner(name) {
+        clearTurnTimer();
+        const container = document.getElementById('messages');
+        const banner = document.createElement('div');
+        banner.className = 'winner-banner';
+        banner.innerHTML = `<h3>🏆 ${name} wygrywa!</h3><p>Zagadka rozwiązana! Gratulacje!</p>`;
+        container.appendChild(banner);
+        container.scrollTop = container.scrollHeight;
+        document.getElementById('turnIndicator').style.display = 'none';
+        document.getElementById('questionInput').disabled = true;
+        document.getElementById('questionInput').dataset.won = '1';
+        document.getElementById('askBtn').disabled = true;
     }
 
     function addMessage(author, text, className) {
@@ -276,7 +445,7 @@
         if (empty) empty.remove();
         const msgDiv = document.createElement('div');
         msgDiv.className = `message ${className}`;
-        msgDiv.innerHTML = `<small style="opacity:0.5; display:block; font-size:10px;">${author}</small>${text}`;
+        msgDiv.innerHTML = `<small style="opacity:0.5;display:block;font-size:10px;">${author}</small>${text}`;
         container.appendChild(msgDiv);
         container.scrollTop = container.scrollHeight;
     }

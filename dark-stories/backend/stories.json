@@ -1,0 +1,218 @@
+[
+  {
+    "id": 1,
+    "title": "Przyciski w windzie",
+    "category": "Klasyczne",
+    "difficulty": "easy",
+    "story": "Każdego dnia rano mężczyzna zjeżdża windą z 20. piętra na parter, by iść do pracy. Gdy wraca, zazwyczaj wjeżdża tylko na 12. piętro i resztę drogi pokonuje schodami. Dlaczego?",
+    "solution": "Mężczyzna jest bardzo niski i nie sięga do przycisków powyżej 12. piętra. Wyjątkiem są deszczowe dni – wtedy ma ze sobą parasol, którym może nacisnąć właściwy guzik swojego piętra.",
+    "education": "Ciekawostka: To klasyczna zagadka na myślenie lateralne, która uczy nas, że rozwiązanie problemu często leży poza naszym zasięgiem... dosłownie!"
+  },
+  {
+    "id": 2,
+    "title": "Tragedia w windzie",
+    "category": "Klasyczne",
+    "difficulty": "medium",
+    "story": "Mężczyzna wsiadł do windy, a kilka sekund później zrozumiał, że jego żona nie żyje. Jak?",
+    "solution": "Jego żona była podłączona do aparatury podtrzymującej życie w tym samym budynku. W windzie nagle zgasło światło i mechanizm stanął – mężczyzna zrozumiał, że nastąpiła awaria prądu, która zabiła też jego żonę.",
+    "education": "Ciekawostka: W tej zagadce kluczem jest powiązanie dwóch pozornie niezwiązanych faktów – unieruchomienia windy i ustania pracy aparatury medycznej."
+  },
+  {
+    "id": 3,
+    "title": "Pustynny pechowiec",
+    "category": "Klasyczne",
+    "difficulty": "medium",
+    "story": "Mężczyzna znajduje się na środku pustyni z plecakiem na plecach. Jest martwy. Gdyby otworzył plecak, wciąż by żył.",
+    "solution": "W plecaku znajdował się spadochron, który nie otworzył się podczas skoku.",
+    "education": "Ciekawostka: Plecak nie zawsze służy do noszenia kanapek. Kontekst 'pustyni' często mylnie sugeruje brak wody jako przyczynę śmierci."
+  },
+  {
+    "id": 4,
+    "title": "Krótka zapałka",
+    "category": "Klasyczne",
+    "difficulty": "hard",
+    "story": "Całkowicie nagi mężczyzna leży martwy na środku spalonej słońcem pustyni. W dłoni trzyma ułamaną zapałkę. W pobliżu nie ma żadnych śladów stóp.",
+    "solution": "Mężczyzna leciał balonem turystycznym z grupą ludzi. Balon nagle zaczął tracić wysokość. Wyrzucili wszystko, ale to nie pomogło. Zdecydowali się ciągnąć zapałki – ten, kto wyciągnie najkrótszą, musi wyskoczyć. Ten mężczyzna miał pecha.",
+    "education": "Ciekawostka: Brak śladów stóp sugeruje upadek z dużej wysokości, co jest kluczowym elementem rozwiązania."
+  },
+  {
+    "id": 5,
+    "title": "Ostatnia audycja",
+    "category": "Klasyczne",
+    "difficulty": "easy",
+    "story": "Kobieta włączyła radio w swoim samochodzie i natychmiast zrozumiała, że jej mąż nie żyje.",
+    "solution": "Jej mąż był prezentera radiowym prowadzącym audycję na żywo. Po włączeniu radia kobieta usłyszała strzały, krzyki i nagłą ciszę w studiu.",
+    "education": "Ciekawostka: Szybkość dedukcji zależy tu od rozpoznania głosu i okoliczności transmisji 'na żywo'."
+  },
+  {
+    "id": 6,
+    "title": "Romeo i Julia",
+    "category": "Klasyczne",
+    "difficulty": "hard",
+    "story": "Martwy Romeo i martwa Julia leżą na podłodze w kałuży wody. Obok leży rozbite szkło. Okno jest szeroko otwarte.",
+    "solution": "Romeo i Julia to złote rybki. Kot wszedł przez otwarte okno i zrzucił ich akwarium ze stołu na podłogę.",
+    "education": "Ciekawostka: Imiona Romeo i Julia to pułapka semantyczna, która ma skłonić Cię do myślenia o ludziach, a nie o zwierzętach."
+  },
+  {
+    "id": 7,
+    "title": "Czerwone szpilki",
+    "category": "Klasyczne",
+    "difficulty": "hard",
+    "story": "Kobieta kupiła nową parę czerwonych szpilek. Kilka godzin później nie żyła.",
+    "solution": "Jej mąż był iluzjonistą. Wykonywał sztuczkę – strzelał z zamkniętymi oczami do jabłka na jej głowie. Nie zauważył nowych obcasów, źle obliczył wysokość i ją zastrzelił.",
+    "education": "Ciekawostka: Precyzja w cyrku jest mierzona w centymetrach. Nowe buty zmieniły kluczowy parametr bezpieczeństwa."
+  },
+  {
+    "id": 8,
+    "title": "Zabójcze pióro",
+    "category": "Klasyczne",
+    "difficulty": "hard",
+    "story": "Mężczyzna leży martwy, a tuż obok niego leży ptasie pióro. Jak zginął?",
+    "solution": "Mężczyzna był połykaczem mieczy. Podczas treningu, gdy miał ostrze w przełyku, ktoś dla żartu połaskał go piórem, co wywołało odruch wymiotny i śmiertelne zranienie.",
+    "education": "Ciekawostka: Praca połykacza mieczy wymaga całkowitej kontroli nad ciałem. Od 1880 roku zgłoszono dwadzieścia dziewięć zgonów w wyniku obrażeń spowodowanych połknięciem miecza."
+  },
+  {
+    "id": 9,
+    "title": "Upragniony krzyk",
+    "category": "Klasyczne",
+    "difficulty": "easy",
+    "story": "Był bardzo spokojny. Jednak bito go tak długo, aż w końcu zaczął krzyczeć. Kiedy to zrobił, kobieta uśmiechnęła się z ulgą. Dlaczego?",
+    "solution": "Kobieta właśnie urodziła syna. Noworodek nie oddychał, więc lekarz musiał go pobudzić do złapania pierwszego oddechu (klepiąc go). Płacz dziecka był znakiem życia.",
+    "education": "Ciekawostka: W tej zagadce 'bicie' i 'krzyk' mają pozytywny, medyczny kontekst, co jest odwrotnością intuicji."
+  },
+  {
+    "id": 10,
+    "title": "Zabójczy ser",
+    "category": "Klasyczne",
+    "difficulty": "easy",
+    "story": "Ludo zamierzał zjeść pyszny kawałek sera, gdy nagle został zabity przez kawałek metalu. Co się stało?",
+    "solution": "Ludo to mysz. Został zabity przez mechanizm zatrzaskującej się pułapki na myszy.",
+    "education": "Ciekawostka: Nadanie zwierzęciu imienia to częsty trik w zagadkach, mający na celu 'uczłowieczenie' bohatera w oczach gracza."
+  },
+  {
+    "id": 11,
+    "title": "Zatruta kolacja",
+    "category": "Klasyczne",
+    "difficulty": "medium",
+    "story": "Kobieta zaplanowała, że zabije męża podczas kolacji. Zamiast tego, w trakcie jej przygotowywania, popełniła samobójstwo.",
+    "solution": "Chciała go otruć lekami. Odkryła, że jej mały synek zjadł je, myśląc, że to cukierki. Kobieta nie mogła znieść tragedii i odebrała sobie życie.",
+    "education": "Ciekawostka: Tragedia wynika z ironii losu – pułapka zastawiona na jedną osobę pochłonęła najbardziej niewinną ofiarę."
+  },
+  {
+    "id": 12,
+    "title": "Mrożona herbata",
+    "category": "Klasyczne",
+    "difficulty": "medium",
+    "story": "Dwaj mężczyźni zamawiają tę samą mrożoną herbatę. Pierwszy wypija swoją duszkiem. Drugi pije powoli. Drugi mężczyzna umiera, pierwszy przeżywa. Jak to możliwe?",
+    "solution": "Trucizna była w kostkach lodu. Pierwszy mężczyzna wypił herbatę tak szybko, że lód nie zdążył się rozpuścić. U drugiego toksyna wyciekła do napoju.",
+    "education": "Ciekawostka: Czas jest tu czynnikiem decydującym o przeżyciu – szybkość zadziałała jako filtr bezpieczeństwa."
+  },
+  {
+    "id": 13,
+    "title": "Fałszywy pracownik",
+    "category": "PKO Bank Polski",
+    "difficulty": "medium",
+    "story": "Marek odebrał telefon od pracownika banku. Podał mu kod, o który prosił, a chwilę później stracił oszczędności życia. Przecież na ekranie wyświetlał się oficjalny numer banku!",
+    "solution": "Marek padł ofiarą 'spoofingu'. Oszust użył oprogramowania, by podszyć się pod numer banku. Prawdziwy pracownik PKO BP nigdy nie prosi o podanie haseł czy kodów BLIK przez telefon.",
+    "education": "Wiedza PKO BP: Pamiętaj, pracownik banku nigdy nie prosi o kody BLIK czy instalację AnyDesk. Jeśli masz wątpliwości, rozłącz się i zadzwoń na infolinię samodzielnie."
+  },
+  {
+    "id": 14,
+    "title": "Magiczne grosze",
+    "category": "PKO Bank Polski",
+    "difficulty": "easy",
+    "story": "Anna zauważyła, że z jej konta po cichu znikają małe kwoty. Mimo to, pod koniec roku była z tego powodu bardzo szczęśliwa.",
+    "solution": "Anna uruchomiła usługę Autooszczędzania. Bank zaokrąglał kwoty zakupów i przelewał 'resztę' na konto oszczędnościowe.",
+    "education": "Wiedza PKO BP: Autooszczędzanie to metoda 'zapłać najpierw sobie'. Pozwala budować poduszkę finansową bez wysiłku przy codziennych zakupach."
+  },
+  {
+    "id": 15,
+    "title": "Zgubiony portfel",
+    "category": "PKO Bank Polski",
+    "difficulty": "easy",
+    "story": "Tomek zgubił portfel z kartami i dowodem na drugim końcu Polski. Mimo to normalnie zapłacił za hotel, obiad i wypłacił gotówkę z bankomatu.",
+    "solution": "Tomek miał aplikację IKO. Zastrzegł kartę w telefonie, a za wszystko płacił i wypłacał gotówkę używając kodów BLIK.",
+    "education": "Wiedza PKO BP: Aplikacja IKO pozwala na pełne zarządzanie finansami i bezpieczeństwem (np. zastrzeżenie karty) bez fizycznego portfela."
+  },
+  {
+    "id": 16,
+    "title": "Paczka za 1,50 zł",
+    "category": "PKO Bank Polski",
+    "difficulty": "medium",
+    "story": "Ewa dostała SMS o niedopłacie 1,50 zł za paczkę. Kliknęła w link i opłaciła kwotę. Następnego dnia jej konto było puste, choć paczka faktycznie czekała w paczkomacie.",
+    "solution": "Ewa padła ofiarą phishingu. Link prowadził do fałszywej strony banku. Oszuści przechwycili jej login i hasło. Fakt posiadania prawdziwej paczki był nieszczęśliwym zbiegiem okoliczności.",
+    "education": "Wiedza PKO BP: Nigdy nie loguj się do banku przez linki z SMS-ów. Zawsze sprawdzaj adres URL strony (musi być oficjalna domena banku)."
+  },
+  {
+    "id": 17,
+    "title": "Bilet do Japonii",
+    "category": "PKO Bank Polski",
+    "difficulty": "easy",
+    "story": "Jan kupił bilet do Japonii online. Po powrocie zauważył, że bilet anulowano z powodu braku płatności, mimo że miał pieniądze na koncie i sprawną kartę.",
+    "solution": "Jan miał ustawione niskie limity transakcji internetowych. System bankowy odrzucił płatność przekraczającą ten limit dla jego bezpieczeństwa.",
+    "education": "Wiedza PKO BP: Limity na kartach to Twoja tarcza. Możesz je w każdej chwili zmienić w IKO przed dużym zakupem, a potem zmniejszyć dla bezpieczeństwa."
+  },
+  {
+    "id": 18,
+    "title": "Przyjaciel w potrzebie",
+    "category": "PKO Bank Polski",
+    "difficulty": "medium",
+    "story": "Kasia dostała wiadomość od przyjaciółki z prośbą o pożyczkę BLIK, bo 'karta jej nie działa'. Kasia wysłała kod, ale pieniądze przepadły, a przyjaciółka o niczym nie wiedziała.",
+    "solution": "Konto przyjaciółki zostało przejęte przez oszusta. To on podszył się pod nią i poprosił o kod, który natychmiast wypłacił w bankomacie.",
+    "education": "Wiedza PKO BP: Zanim prześlesz kod BLIK, zawsze zadzwoń do tej osoby i potwierdź prośbę głosowo. To najprostszy sposób na uniknięcie oszustwa."
+  },
+  {
+    "id": 19,
+    "title": "Rowerowy link",
+    "category": "PKO Bank Polski",
+    "difficulty": "hard",
+    "story": "Piotr sprzedawał rower. Kupujący wysłał mu link do 'odebrania wpłaty'. Piotr kliknął i stracił pieniądze, mimo że to on miał je otrzymać.",
+    "solution": "To oszustwo 'na kupującego'. Link prowadził do fałszywego panelu, gdzie Piotr wpisał dane karty, myśląc że odbiera przelew, a w rzeczywistości dał dostęp do konta.",
+    "education": "Wiedza PKO BP: Aby otrzymać przelew, wystarczy podać numer konta lub numer telefonu (BLIK). Nigdy nie loguj się i nie podawaj danych karty, by 'odebrać' pieniądze."
+  },
+  {
+    "id": 20,
+    "title": "Znikający sklep",
+    "category": "PKO Bank Polski",
+    "difficulty": "hard",
+    "story": "Karol kupił telewizor w sklepie, który zbankrutował 2 dni później. Karol uśmiechnął się, złożył jeden wniosek i szybko odzyskał pieniądze bez pomocy policji.",
+    "solution": "Karol zapłacił kartą płatniczą. Skorzystał z procedury Chargeback (obciążenie zwrotne), dzięki której bank odzyskał środki od operatora płatności.",
+    "education": "Wiedza PKO BP: Płacenie kartą w sieci chroni Cię procedurą Chargeback. Jeśli towar nie dotrze lub sprzedawca zniknie, bank pomoże Ci odzyskać pieniądze."
+  },
+  {
+    "id": 21,
+    "title": "Różnica w pizzy",
+    "category": "PKO Bank Polski",
+    "difficulty": "easy",
+    "story": "Jan i Paweł kupili taką samą pizzę w Rzymie płacąc polskimi kartami. Z konta Jana zniknęło o kilkanaście złotych więcej niż u Pawła. Dlaczego?",
+    "solution": "Jan płacił zwykłą kartą (przewalutowanie banku), a Paweł kartą wielowalutową podpiętą do konta w Euro, które zasilił wcześniej w kantorze online.",
+    "education": "Wiedza PKO BP: Karta wielowalutowa i Kantor w aplikacji IKO pozwalają unikać prowizji i płacić za granicą po najlepszych kursach."
+  },
+  {
+    "id": 22,
+    "title": "Kod podpatrzony",
+    "category": "PKO Bank Polski",
+    "difficulty": "easy",
+    "story": "Kieszonkowiec ukradł Marcie portfel. Znał jej PIN, ale nie zdołał wypłacić ani grosza z bankomatu i zrezygnowany wyrzucił kartę.",
+    "solution": "Marta natychmiast po kradzieży użyła aplikacji w telefonie, aby 'czasowo zablokować' kartę, uniemożliwiając jakąkolwiek transakcję.",
+    "education": "Wiedza PKO BP: W IKO możesz czasowo zablokować kartę. To idealne, gdy nie wiesz czy ją zgubiłeś, czy została skradziona – blokada działa natychmiast."
+  },
+  {
+    "id": 23,
+    "title": "Złota okazja",
+    "category": "PKO Bank Polski",
+    "difficulty": "medium",
+    "story": "Tomasz zainwestował w akcje polecane przez aktora w internecie. Widział ogromne zyski na ekranie, ale gdy chciał wypłacić środki, stracił wszystko.",
+    "solution": "To oszustwo inwestycyjne (deepfake). Wykresy były fałszywe, a przy próbie wypłaty kazano mu zainstalować aplikację do zdalnego pulpitu, przejmując jego konto.",
+    "education": "Wiedza PKO BP: Uważaj na okazje 'bez ryzyka'. Bank nigdy nie prosi o instalację oprogramowania do zdalnego pulpitu (np. AnyDesk lub TeamViewer)."
+  },
+  {
+    "id": 24,
+    "title": "Hasło ze sklepu",
+    "category": "PKO Bank Polski",
+    "difficulty": "hard",
+    "story": "Przestępca włamał się na konto Anny bez wirusów i phishingu. Systemy banku były bezpieczne. Jak to zrobił?",
+    "solution": "Anna miała to samo hasło do banku i do małego sklepu internetowego. Sklep miał wyciek danych, a hakerzy po prostu wypróbowali to hasło w banku.",
+    "education": "Wiedza PKO BP: Twoje hasło do banku musi być unikalne. Nigdy nie używaj go w innych serwisach, social mediach czy sklepach."
+  }
+]

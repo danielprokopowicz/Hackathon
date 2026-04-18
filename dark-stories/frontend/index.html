@@ -3,16 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dark Stories</title>
+  <title>Mystery Solver - Hackathon Edition</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/static/css/style.css" />
+  <style>
+    /* Style dla kategorii Hackathonu */
+    .generator-panel { background: #ffffff; padding: 30px; border-radius: 12px; margin-top: 30px; text-align: center; border: 1px solid #eaeaea; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+    .generator-panel h3 { color: #1a1a1a; font-weight: 600; margin-bottom: 5px; }
+    .generator-panel p { font-size: 0.9rem; color: #666; margin-bottom: 20px; }
+    .btn-group { display: flex; gap: 12px; justify-content: center; margin-top: 15px; flex-wrap: wrap; }
+    .cat-btn { padding: 12px 24px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; opacity: 0.9; color: white; font-size: 0.95rem; }
+    .cat-btn:hover { opacity: 1; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+    .cat-klasyczne { background: #b91c1c; }
+    .cat-pko { background: #003399; }
+    .cat-tauron { background: #e4007d; }
+    
+    .badge-pko { background: #003399; color: white; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; margin-bottom: 10px; display: inline-block; font-weight: bold; text-transform: uppercase;}
+    .badge-tauron { background: #e4007d; color: white; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; margin-bottom: 10px; display: inline-block; font-weight: bold; text-transform: uppercase;}
+    .badge-klasyczne { background: #374151; color: white; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; margin-bottom: 10px; display: inline-block; font-weight: bold; text-transform: uppercase;}
+    
+    /* Box na rozwiązanie - domyślnie dodany padding dla ładnego wyglądu */
+    .solution-box { margin-top: 15px; padding: 15px; background: #f9f9f9; border-left: 4px solid #b91c1c; border-radius: 4px; }
+  </style>
 </head>
 <body>
   <div id="app">
 
-    <!-- LIST VIEW -->
     <div id="listView" class="view active">
       <header class="site-header">
         <div class="header-inner">
@@ -33,33 +51,21 @@
           <div class="loading-state">Ładowanie historyjek...</div>
         </div>
 
-        <div class="generate-section">
-          <p class="generate-label">✦ Wygeneruj historyjkę przez AI</p>
-          <div class="generate-buttons">
-            <button class="gen-btn gen-dark" onclick="generateRandom('dark')">
-              <span class="gen-icon">🌑</span>
-              <span class="gen-title">Mroczne historie</span>
-              <span class="gen-sub">Klasyczny Dark Stories</span>
-            </button>
-            <button class="gen-btn gen-pko" onclick="generateRandom('pko')">
-              <span class="gen-icon">🎮</span>
-              <span class="gen-title">PKO XP Gaming</span>
-              <span class="gen-sub">Świat gier i esportu</span>
-            </button>
-            <button class="gen-btn gen-tauron" onclick="generateRandom('tauron')">
-              <span class="gen-icon">⚡</span>
-              <span class="gen-title">Tauron AI</span>
-              <span class="gen-sub">Energia i technologia</span>
-            </button>
-          </div>
+        <div class="generator-panel">
+            <h3>✦ Wygeneruj nową sprawę przez AI ✦</h3>
+            <p>Wybierz kategorię i pozwól sztucznej inteligencji stworzyć unikalną historię</p>
+            <div class="btn-group">
+                <button class="cat-btn cat-klasyczne" onclick="generateStory('Klasyczne', 'medium')">💀 Klasyczna Mroczna</button>
+                <button class="cat-btn cat-pko" onclick="generateStory('PKO Bank Polski', 'medium')">🏦 Sukces PKO BP</button>
+                <button class="cat-btn cat-tauron" onclick="generateStory('Tauron', 'medium')">⚡ Energia Tauron</button>
+            </div>
         </div>
       </main>
     </div>
 
-    <!-- GAME VIEW -->
     <div id="gameView" class="view">
       <div class="game-container">
-        <button class="back-btn" id="backBtn">
+        <button class="back-btn" id="backBtn" onclick="showListView()">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -67,30 +73,23 @@
         </button>
 
         <div class="game-layout">
-          <!-- LEFT: Story Panel -->
           <div class="story-panel">
-            <span class="badge" id="gameBadge"></span>
+            <span id="catBadge"></span>
             <h2 id="gameTitle"></h2>
             <p class="story-text" id="gameStory"></p>
 
-            <button class="reveal-btn" id="revealBtn">Pokaż rozwiązanie</button>
-            <div class="solution-box" id="solutionBox"></div>
+            <button class="reveal-btn" id="btn-show" onclick="toggleRozwiazanie()">Pokaż rozwiązanie</button>
+            
+            <div id="rozwiazanie-box" class="solution-box" style="display: none;">
+                <strong style="color: #b91c1c;">Prawdziwa historia:</strong><br>
+                <span id="gameSolution"></span>
+            </div>
           </div>
 
-          <!-- RIGHT: Q&A Panel -->
           <div class="qa-panel">
             <div class="qa-header">
-              <div class="qa-header-top">
-                <div>
-                  <h3>Zadaj pytanie</h3>
-                  <p>AI odpowie <strong>Tak</strong>, <strong>Nie</strong> lub <strong>Nie ma to znaczenia</strong></p>
-                </div>
-                <button class="hint-btn" id="hintBtn">
-                  <span class="hint-icon">💡</span>
-                  <span id="hintLabel">Podpowiedź</span>
-                  <span class="hint-count" id="hintCount"></span>
-                </button>
-              </div>
+              <h3>Zadaj pytanie</h3>
+              <p>AI odpowie <strong>Tak</strong>, <strong>Nie</strong> lub <strong>Nie ma znaczenia</strong></p>
             </div>
 
             <div class="messages" id="messages">
@@ -101,17 +100,8 @@
 
             <div class="input-area">
               <div class="input-row">
-                <input
-                  type="text"
-                  id="questionInput"
-                  placeholder="Czy ofiara znała sprawcę?"
-                  autocomplete="off"
-                />
-                <button id="askBtn">Zapytaj</button>
-              </div>
-              <div class="input-footer">
-                <p class="input-hint">Wciskaj Enter lub kliknij Zapytaj</p>
-                <button class="giveup-btn" id="giveUpBtn">Poddaj się</button>
+                <input type="text" id="questionInput" placeholder="Czy ofiara..." autocomplete="off" onkeypress="if(event.key==='Enter') askQuestion()" />
+                <button id="askBtn" onclick="askQuestion()">Zapytaj</button>
               </div>
             </div>
           </div>
@@ -121,6 +111,175 @@
 
   </div>
 
-  <script src="/static/js/app.js"></script>
+  <script>
+    let currentStories = [];
+    let activeStory = null;
+
+    // Słowniki do tłumaczenia poziomów trudności na polski z zachowaniem klas CSS
+    const diffTextPl = {
+        'easy': 'ŁATWE',
+        'medium': 'ŚREDNIE',
+        'hard': 'TRUDNE',
+        'Łatwe': 'ŁATWE',
+        'Średnie': 'ŚREDNIE',
+        'Trudne': 'TRUDNE'
+    };
+    
+    const diffClassMap = {
+        'easy': 'easy',
+        'medium': 'medium',
+        'hard': 'hard',
+        'Łatwe': 'easy',
+        'Średnie': 'medium',
+        'Trudne': 'hard'
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchStories();
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                e.target.classList.add('active');
+                renderStories(e.target.dataset.filter);
+            });
+        });
+    });
+
+    async function fetchStories() {
+        try {
+            // Dodano "?t=" na końcu, by zniszczyć cache przeglądarki
+            const res = await fetch('/api/stories?t=' + new Date().getTime());
+            currentStories = await res.json();
+            renderStories('all');
+        } catch (err) {
+            document.getElementById('storiesGrid').innerHTML = '<div class="loading-state">Błąd ładowania.</div>';
+        }
+    }
+
+    function renderStories(filter) {
+        const grid = document.getElementById('storiesGrid');
+        grid.innerHTML = '';
+        
+        // Zabezpieczenie filtrów pod polskie nazwy (jesli z AI wpadnie polska)
+        const filtered = currentStories.filter(s => {
+            if (filter === 'all') return true;
+            if (s.difficulty === filter) return true;
+            // Mapowanie wsteczne dla filtrów
+            if (filter === 'easy' && s.difficulty === 'Łatwe') return true;
+            if (filter === 'medium' && s.difficulty === 'Średnie') return true;
+            if (filter === 'hard' && s.difficulty === 'Trudne') return true;
+            return false;
+        });
+        
+        filtered.forEach(story => {
+            const card = document.createElement('div');
+            card.className = 'story-card';
+            
+            let catClass = 'badge-klasyczne';
+            if(story.category === 'PKO Bank Polski') catClass = 'badge-pko';
+            if(story.category === 'Tauron') catClass = 'badge-tauron';
+
+            // Tłumaczenie napisów na kartach
+            const translatedDiff = diffTextPl[story.difficulty] || story.difficulty;
+            const classDiff = diffClassMap[story.difficulty] || 'medium';
+
+            card.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span class="${catClass}">${story.category || 'Klasyczne'}</span>
+                    <span class="badge ${classDiff}">${translatedDiff}</span>
+                </div>
+                <h3>${story.title}</h3>
+                <p>${story.story}</p>
+            `;
+            card.onclick = () => openGame(story);
+            grid.appendChild(card);
+        });
+    }
+
+    async function generateStory(category, difficulty) {
+        const panel = document.querySelector('.generator-panel h3');
+        const oldText = panel.innerText;
+        panel.innerText = "⏳ Generowanie...";
+        try {
+            const res = await fetch('/api/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ category, difficulty })
+            });
+            const newStory = await res.json();
+            openGame(newStory);
+        } catch (e) { alert("Błąd AI."); }
+        finally { panel.innerText = oldText; }
+    }
+
+    function openGame(storyData) {
+        activeStory = storyData;
+        document.getElementById('listView').classList.remove('active');
+        document.getElementById('gameView').classList.add('active');
+        
+        // KULOODPORNE UKRYWANIE
+        document.getElementById('rozwiazanie-box').style.display = 'none';
+        document.getElementById('btn-show').innerText = "Pokaż rozwiązanie";
+        
+        document.getElementById('gameTitle').innerText = storyData.title;
+        document.getElementById('gameStory').innerText = storyData.story;
+        
+        // Zabezpieczenie przed brakiem danych z serwera
+        document.getElementById('gameSolution').innerText = storyData.solution || "⚠️ Przeglądarka zablokowała dane. Użyj skrótu Ctrl+F5 by odświeżyć pamięć strony.";
+        
+        const badge = document.getElementById('catBadge');
+        badge.innerText = storyData.category || 'Klasyczne';
+        badge.className = storyData.category === 'PKO Bank Polski' ? 'badge-pko' : (storyData.category === 'Tauron' ? 'badge-tauron' : 'badge-klasyczne');
+        document.getElementById('messages').innerHTML = '<div class="empty-state"><span>Zacznij zadawać pytania...</span></div>';
+    }
+
+    // KULOODPORNE POKAZYWANIE
+    function toggleRozwiazanie() {
+        const box = document.getElementById('rozwiazanie-box');
+        const btn = document.getElementById('btn-show');
+        
+        if (box.style.display === 'none' || box.style.display === '') {
+            box.style.display = 'block';
+            btn.innerText = "Ukryj rozwiązanie";
+        } else {
+            box.style.display = 'none';
+            btn.innerText = "Pokaż rozwiązanie";
+        }
+    }
+
+    function showListView() {
+        document.getElementById('gameView').classList.remove('active');
+        document.getElementById('listView').classList.add('active');
+    }
+
+    async function askQuestion() {
+        const input = document.getElementById('questionInput');
+        const q = input.value.trim();
+        if (!q) return;
+
+        addMessage('Ty', q, 'user-msg');
+        input.value = '';
+        try {
+            const res = await fetch('/api/ask', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ story_id: activeStory.id, question: q, story_data: activeStory.id === 'random' ? activeStory : null })
+            });
+            const data = await res.json();
+            addMessage('Sędzia', data.answer, 'ai-msg');
+        } catch (e) { addMessage('System', 'Błąd.', 'ai-msg error'); }
+    }
+
+    function addMessage(author, text, className) {
+        const container = document.getElementById('messages');
+        const empty = container.querySelector('.empty-state');
+        if (empty) empty.remove();
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `message ${className}`;
+        msgDiv.innerHTML = `<small style="opacity:0.5; display:block; font-size:10px;">${author}</small>${text}`;
+        container.appendChild(msgDiv);
+        container.scrollTop = container.scrollHeight;
+    }
+  </script>
 </body>
 </html>

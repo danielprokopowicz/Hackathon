@@ -2,15 +2,10 @@ const API = '';
 
 const DIFFICULTY_LABELS = { easy: 'Łatwe', medium: 'Średnie', hard: 'Trudne' };
 
-const HINTS_PER_DIFFICULTY = { easy: 5, medium: 3, hard: 1 };
-
 let allStories = [];
 let currentStory = null;
 let solutionVisible = false;
 let isAsking = false;
-let hintsUsed = 0;
-let hintsMax = 3;
-let gameOver = false;
 
 // ===== INIT =====
 
@@ -22,9 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
 function setupEventListeners() {
   document.getElementById('backBtn').addEventListener('click', goBack);
   document.getElementById('revealBtn').addEventListener('click', toggleSolution);
+  document.getElementById('randomBtn').addEventListener('click', generateRandom);
   document.getElementById('askBtn').addEventListener('click', askQuestion);
-  document.getElementById('hintBtn').addEventListener('click', requestHint);
-  document.getElementById('giveUpBtn').addEventListener('click', giveUp);
   document.getElementById('questionInput').addEventListener('keydown', e => {
     if (e.key === 'Enter') askQuestion();
   });
@@ -89,15 +83,9 @@ async function askQuestion() {
 
     const loadingEl = document.getElementById(loadingId);
     if (loadingEl) {
-      if (data.solved) {
-        loadingEl.className = 'msg ai solved';
-        loadingEl.textContent = 'Brawo! Rozwiązałeś zagadkę!';
-        showWin();
-      } else {
-        const cls = getAnswerClass(answer);
-        loadingEl.className = `msg ai ${cls}`;
-        loadingEl.textContent = answer;
-      }
+      const cls = getAnswerClass(answer);
+      loadingEl.className = `msg ai ${cls}`;
+      loadingEl.textContent = answer;
     }
   } catch {
     const loadingEl = document.getElementById(loadingId);
@@ -112,87 +100,13 @@ async function askQuestion() {
   scrollMessages();
 }
 
-async function requestHint() {
-  if (!currentStory || isAsking) return;
-  if (hintsUsed >= hintsMax) return;
-
-  isAsking = true;
-  const btn = document.getElementById('hintBtn');
+async function generateRandom() {
+  const btn = document.getElementById('randomBtn');
   btn.disabled = true;
-
-  removeEmptyState();
-  const loadingId = 'hint-' + Date.now();
-  appendMessage('Szukam wskazówki...', 'ai loading', loadingId);
-  scrollMessages();
-
-  const body = {
-    story_id: currentStory.id,
-    hint_num: hintsUsed + 1,
-    max_hints: hintsMax,
-  };
-  if (currentStory.id === 'random') {
-    body.story_data = currentStory;
-  }
+  btn.innerHTML = '<span class="random-icon">✦</span> Generuję historyjkę...';
 
   try {
-    const res = await fetch(`${API}/api/hint`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    });
-    if (!res.ok) throw new Error('Server error');
-    const data = await res.json();
-    const el = document.getElementById(loadingId);
-    if (el) {
-      el.className = 'msg ai hint';
-      el.textContent = data.hint;
-    }
-    hintsUsed++;
-    updateHintBtn();
-  } catch {
-    const el = document.getElementById(loadingId);
-    if (el) {
-      el.className = 'msg ai no';
-      el.textContent = 'Błąd pobierania wskazówki.';
-    }
-  }
-
-  isAsking = false;
-  if (hintsUsed < hintsMax) btn.disabled = false;
-  scrollMessages();
-}
-
-function updateHintBtn() {
-  const btn = document.getElementById('hintBtn');
-  const countEl = document.getElementById('hintCount');
-  const remaining = hintsMax - hintsUsed;
-  countEl.textContent = `${remaining} pozostało`;
-  if (remaining <= 0) {
-    btn.disabled = true;
-  }
-}
-
-const CATEGORY_LABELS = {
-  dark: 'Mroczne historie',
-  pko: 'PKO XP Gaming',
-  tauron: 'Tauron AI',
-};
-
-async function generateRandom(category = 'dark') {
-  const btns = document.querySelectorAll('.gen-btn');
-  btns.forEach(b => { b.disabled = true; });
-  const activeBtn = document.querySelector(`.gen-${category}`);
-  if (activeBtn) {
-    const icon = activeBtn.querySelector('.gen-icon');
-    if (icon) icon.textContent = '⏳';
-  }
-
-  try {
-    const res = await fetch(`${API}/api/generate`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ category }),
-    });
+    const res = await fetch(`${API}/api/generate`, { method: 'POST' });
     if (!res.ok) throw new Error('Server error');
     const story = await res.json();
     openStory(story);
@@ -200,12 +114,8 @@ async function generateRandom(category = 'dark') {
     alert('Błąd generowania historyjki. Spróbuj ponownie.');
   }
 
-  btns.forEach(b => { b.disabled = false; });
-  const icons = { dark: '🌑', pko: '🎮', tauron: '⚡' };
-  if (activeBtn) {
-    const icon = activeBtn.querySelector('.gen-icon');
-    if (icon) icon.textContent = icons[category] || '✦';
-  }
+  btn.disabled = false;
+  btn.innerHTML = '<span class="random-icon">✦</span> Wygeneruj losową historyjkę przez AI';
 }
 
 // ===== RENDER =====
@@ -242,9 +152,6 @@ function renderStories(filter = 'all') {
 function openStory(story) {
   currentStory = story;
   solutionVisible = false;
-  hintsUsed = 0;
-  hintsMax = HINTS_PER_DIFFICULTY[story.difficulty] ?? 3;
-  gameOver = false;
 
   document.getElementById('gameBadge').className = `badge ${story.difficulty}`;
   document.getElementById('gameBadge').textContent = DIFFICULTY_LABELS[story.difficulty] || '—';
@@ -263,60 +170,8 @@ function openStory(story) {
   `;
 
   document.getElementById('questionInput').value = '';
-  document.getElementById('questionInput').disabled = false;
-  document.getElementById('askBtn').disabled = false;
-  document.getElementById('hintBtn').disabled = false;
-  document.getElementById('giveUpBtn').disabled = false;
-  updateHintBtn();
   showView('gameView');
   window.scrollTo(0, 0);
-}
-
-function showWin() {
-  if (gameOver) return;
-  gameOver = true;
-  const panel = document.querySelector('.qa-panel');
-  const input = document.getElementById('questionInput');
-  const btn = document.getElementById('askBtn');
-  input.disabled = true;
-  btn.disabled = true;
-  document.getElementById('hintBtn').disabled = true;
-  document.getElementById('giveUpBtn').disabled = true;
-
-  const win = document.createElement('div');
-  win.className = 'win-banner';
-  win.innerHTML = `
-    <div class="win-title">Zagadka rozwiązana</div>
-    <div class="win-sub">Odkryłeś prawdę kryjącą się za historią.</div>
-    <button class="win-btn" onclick="document.getElementById('revealBtn').click()">Pokaż rozwiązanie</button>
-  `;
-  panel.appendChild(win);
-}
-
-function giveUp() {
-  if (!currentStory || gameOver) return;
-  gameOver = true;
-
-  const input = document.getElementById('questionInput');
-  const askBtn = document.getElementById('askBtn');
-  const hintBtn = document.getElementById('hintBtn');
-  const giveUpBtn = document.getElementById('giveUpBtn');
-  input.disabled = true;
-  askBtn.disabled = true;
-  hintBtn.disabled = true;
-  giveUpBtn.disabled = true;
-
-  if (!solutionVisible) toggleSolution();
-
-  const panel = document.querySelector('.qa-panel');
-  const lose = document.createElement('div');
-  lose.className = 'lose-banner';
-  lose.innerHTML = `
-    <div class="lose-title">Poddałeś się</div>
-    <div class="lose-sub">Tym razem zagadka okazała się zbyt trudna. Rozwiązanie zostało ujawnione.</div>
-    <button class="lose-btn" onclick="document.getElementById('revealBtn').click()">Pokaż rozwiązanie</button>
-  `;
-  panel.appendChild(lose);
 }
 
 function goBack() {

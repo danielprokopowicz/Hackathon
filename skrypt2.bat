@@ -1,0 +1,13 @@
+@echo off
+
+echo Tworzenie wirtualnego srodowiska (venv)...
+python -m venv venv
+
+echo Aktywacja srodowiska...
+call venv\Scripts\activate.bat
+
+echo Instalacja zaleznosci...
+pip install -r requirements.txt
+
+echo Uruchamianie aplikacji...
+uvicorn main:app --reload --host 0.0.0.0 --port 8000

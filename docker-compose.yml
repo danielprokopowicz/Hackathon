@@ -6,5 +6,5 @@ services:
     ports:
       - "8000:8000"
     container_name: rozwiklaj_to
-    env_file:
-      - .env
+    environment:
+      - GEMINI_API_KEY=XXXX

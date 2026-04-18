@@ -64,8 +64,8 @@
         padding: 0 !important;
         border: none !important;
         box-shadow: none !important;
-        perspective: 1000px; /* Tworzy głębię 3D */
-        height: 220px; /* STAŁY ROZMIAR KAFELKA */
+        perspective: 1000px; 
+        height: 220px; 
     }
 
     .flip-card-inner {
@@ -77,14 +77,14 @@
     }
 
     .story-card:hover .flip-card-inner {
-        transform: rotateY(180deg); /* Obrót po najechaniu */
+        transform: rotateY(180deg); 
     }
 
     .flip-card-front, .flip-card-back {
         position: absolute;
         width: 100%;
         height: 100%;
-        backface-visibility: hidden; /* Ukrywa tył karty */
+        backface-visibility: hidden; 
         border-radius: 12px;
         padding: 20px;
         background: #ffffff;
@@ -97,39 +97,33 @@
     .flip-card-back {
         transform: rotateY(180deg);
         background: #f8fafc;
-        border-left: 4px solid #003399; /* Akcent PKO na odwrocie */
+        border-left: 4px solid #003399; 
     }
 
     .flip-card-back p {
         font-size: 0.9rem;
         color: #333;
         margin: 0;
-        overflow-y: auto; /* Pasek przewijania, jeśli tekst jest bardzo długi */
+        overflow-y: auto; 
         max-height: 130px;
         padding-right: 5px;
         line-height: 1.5;
     }
 
-    /* Ładny, cienki pasek przewijania dla opisu na odwrocie */
     .flip-card-back p::-webkit-scrollbar { width: 4px; }
     .flip-card-back p::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
 
     .tab {
-        /* Ustawiamy płynne przejście z lekką "sprężynką" (cubic-bezier) */
         transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
-        position: relative; /* Potrzebne do z-index */
+        position: relative; 
     }
 
     .tab:hover {
-        /* Przycisk podskakuje do góry o 3px i powiększa się o 5% */
         transform: translateY(-3px) scale(1.05);
-        /* Dodajemy ładny cień pod spodem, żeby sprawiał wrażenie oderwania od tła */
         box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-        /* Wysuwamy go na wierzch, żeby przy powiększeniu nie chował się pod innymi */
         z-index: 10; 
     }
     
-    /* Wyłączenie efektu powiększania dla przycisków, które są już aktywne (opcjonalne, ale wygląda profesjonalniej) */
     .tab.active:hover {
         transform: none;
         box-shadow: none;

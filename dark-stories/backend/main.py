@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from google import genai
-from google.genai import types # Potrzebne do optymalizacji i wymuszenia JSON
+from google.genai import types 
 from dotenv import load_dotenv
 import json
 import os
@@ -69,7 +69,6 @@ def ask_question(req: QuestionRequest):
     f"Pytanie gracza: {req.question}"
 )
 
-    # Kaganiec prędkości dla szybkiej odpowiedzi
     response = client.models.generate_content(
         model=GEMINI_MODEL, 
         contents=prompt,
@@ -86,7 +85,6 @@ def generate_story(req: GenerateRequest):
     else:
         kontekst = "Temat: klasyczna mroczna, absurdalna lub makabryczna sytuacja."
 
-    # Nowy, rygorystyczny prompt wymuszający styl "Czarnych Historii"
     prompt = (
         f"Jesteś mistrzem gry 'Czarne Historie' (Dark Stories). Stwórz nową zagadkę na myślenie lateralne.\n"
         f"{kontekst}\n"

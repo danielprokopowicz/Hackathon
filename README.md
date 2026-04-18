@@ -1,115 +1,80 @@
-# Dark Stories 🕯️
+# 🕵️‍♂️ Rozwikłaj.To - Edycja Hackathon 
 
-Webowa gra w stylu Dark Stories z podpiętym AI (Claude) odpowiadającym na pytania Tak/Nie.
+> **ETHSilesia 2026 Hackathon Submission**
+> Grywalizacyjna aplikacja edukacyjna end-to-end napędzana przez GenAI.
 
-## Struktura projektu
+## 🎯 Wybrane Ścieżki / Bounties
+- **PKO XP: Gaming**
+- **AI Challenge powered by Tauron**
 
-```
-dark-stories/
-├── backend/
-│   ├── main.py            # FastAPI server + Anthropic API
-│   └── requirements.txt
-└── frontend/
-    ├── index.html
-    └── static/
-        ├── css/style.css
-        └── js/app.js
-```
+## 👥 Członkowie Zespołu
+- Daniel Prokopowicz
+- Michał Glimos
+- Wojciech Pilch
+- Jakub Frydrych
+- Szymon Molenda
 
-## Uruchomienie
+## 🔗 Ważne Linki
+- **🎬 Wideo (Pitch & Demo) - YouTube:** [Link do YouTube]
+- **📊 Prezentacja (Pitch Deck):** [Link do prezentacji]
+- **🌐 Działające Demo:** [Link, jeśli hostujecie aplikację np. na Vercel/Render]
 
-### 1. Klucz API
+---
 
-Ustaw zmienną środowiskową z kluczem Anthropic:
+## 💡 O Projekcie (MVP)
 
-```bash
-# Linux / macOS
-export ANTHROPIC_API_KEY="sk-ant-..."
+### Problem
+Współcześni użytkownicy ignorują tradycyjne treści edukacyjne. Długie poradniki finansowe czy artykuły o oszczędzaniu przegrywają walkę o uwagę z TikTokiem i grami mobilnymi. Użytkownicy pragną szybkich, interaktywnych pętli z natychmiastową informacją zwrotną.
 
-# Windows (PowerShell)
-$env:ANTHROPIC_API_KEY="sk-ant-..."
-```
+### Nasze Rozwiązanie: Mystery Solver
+Przekształciliśmy klasyczną grę na myślenie ("Dark Stories") w potężne narzędzie edukacyjne oparte na GenAI. 
+Gracze wcielają się w detektywów, zadając Sędziemu AI pytania, na które może on odpowiedzieć tylko "Tak", "Nie" lub "Nie ma znaczenia". Ich celem jest rozwiązanie absurdalnych, pozornie nielogicznych zagadek. Haczyk? Oprócz klasycznych Dark Stories te zagadki są także głęboko osadzone w rzeczywistych scenariuszach: atakach phishingowych, błędach instalacji fotowoltaicznych czy pułapkach finansowych.
 
-Klucz API możesz wygenerować na: https://console.anthropic.com/
+Po rozwiązaniu zagadki, gracze odblokowują **"Pigułkę Wiedzy"** — krótką, bardzo wartościową ciekawostkę edukacyjną od sponsora (PKO BP lub Tauron).
 
-### 2. Backend (FastAPI)
+### Kluczowe Funkcje
+* 🧠 **Mistrz Gry AI:** System zasilany przez Google GenAI pełni rolę bezstronnego sędziego, dynamicznie analizując pytania graczy w czasie rzeczywistym.
+* 🎲 **Dwa Tryby Gry:** * **Współpraca:** Zespół wspólnie próbuje rozwikłać sprawę - bez limitu czasu.
+  * **Rywalizacja (do 8 graczy):** Tury z limitem czasowym. Wygrywa ten, kto pierwszy dojdzie do prawdy.
+* ⚡ **Generowanie Spraw na Żywo:** Dedykowany generator AI tworzy nieskończoną liczbę nowych, unikalnych zagadek na żądanie, dopasowanych do konkretnych kategorii sponsorów.
+* 🏷️ **Dynamiczne Filtry i Karty 3D:** W pełni responsywny frontend napisany w Vanilla JS z animacjami kart 3D dla płynnej eksploracji bazy.
 
-```bash
-cd backend
+---
+
+## ⚖️ Spełnienie Kryteriów Oceny (Checklist)
+
+* **Innowacyjność:** Zamiast nudnych quizów, wykorzystujemy myślenie lateralne i sztuczną inteligencję do grywalizacji wiedzy. Użytkownicy *chcą* rozwiązać zagadkę, co sprawia, że edukacyjna puenta na końcu jest traktowana jako nagroda, a nie obowiązek.
+* **Wartość Dodana:** Aplikacja buduje nawyki. Krótkie rundy idealnie wpasowują się w czas dojazdów do pracy, "przypadkiem" ucząc kluczowych nawyków z zakresu bezpieczeństwa finansowego i efektywności energetycznej.
+* **Kwestie Techniczne:** Czysta, lekka architektura. Backend w FastAPI zapewnia szybkie wnioskowanie AI poprzez Google GenAI SDK, współpracując z bardzo wydajnym frontendem (HTML/JS/CSS) pozbawionym ciężkich frameworków.
+* **Kompletność:** To w pełni funkcjonalne MVP (end-to-end). Posiada bazę 36 starannie przygotowanych historii, integrację AI w czasie rzeczywistym, zarządzanie stanem gry dla wielu graczy oraz dopracowany interfejs.
+
+---
+
+## 🛠️ Technologie (Tech Stack)
+- **Backend:** Python, FastAPI, Uvicorn
+- **Integracja AI:** Google GenAI SDK (`gemma-3-27b-it`)
+- **Frontend:** HTML5, CSS3, Vanilla JavaScript
+- **Baza Danych:** Lokalny plik JSON (gotowy do łatwego skalowania do NoSQL)
+
+---
+
+## 🚀 Jak uruchomić lokalnie
+
+1. **Sklonuj repozytorium:**
+   ```bash
+   git clone [TWÓJ LINK DO GITHUBA]
+   cd [NAZWA FOLDERU]
+Zainstaluj zależności:
+
+Bash
 pip install -r requirements.txt
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
-```
+Skonfiguruj klucz API:
+Upewnij się, że Twój klucz API Google GenAI jest podany w pliku backend/main.py. (Uwaga: w środowisku produkcyjnym klucz powinien zostać przeniesiony do pliku .env).
 
-Serwer będzie dostępny na: http://localhost:8000
+Uruchom serwer backendowy:
 
-Frontend jest serwowany automatycznie przez FastAPI ze ścieżki `../frontend`.
-
-### 3. Gotowe!
-
-Otwórz przeglądarkę i wejdź na: **http://localhost:8000**
-
----
-
-## API Endpoints
-
-| Metoda | Ścieżka | Opis |
-|--------|---------|------|
-| GET | `/api/stories` | Lista historyjek (bez rozwiązań) |
-| POST | `/api/ask` | Zadaj pytanie do historyjki |
-| POST | `/api/generate` | Wygeneruj losową historyjkę przez AI |
-
-### Przykład `/api/ask`
-
-```json
-POST /api/ask
-{
-  "story_id": 1,
-  "question": "Czy ofiara znała sprawcę?"
-}
-```
-
-Odpowiedź:
-```json
-{
-  "answer": "Tak. To ważny trop."
-}
-```
-
-### Przykład dla historyjki wygenerowanej przez AI
-
-```json
-POST /api/ask
-{
-  "story_id": "random",
-  "story_data": {
-    "title": "Tytuł",
-    "story": "Zarys...",
-    "solution": "Rozwiązanie..."
-  },
-  "question": "Czy to było zabójstwo?"
-}
-```
-
----
-
-## Jak to działa
-
-1. **Lista historyjek** – 6 predefiniowanych zagadek w 3 poziomach trudności
-2. **Widok gry** – po lewej zarys historii, po prawej czat z AI
-3. **AI odpowiada** – Claude zna pełne rozwiązanie i odpowiada Tak/Nie/Nie ma to znaczenia
-4. **Rozwiązanie** – ukryte, dostępne po kliknięciu przycisku
-5. **Generator losowy** – AI generuje nową oryginalną historyjkę on-the-fly
-
-## Dodawanie własnych historyjek
-
-W pliku `backend/main.py` w liście `STORIES` dodaj nowy obiekt:
-
-```python
-{
-    "id": 7,
-    "title": "Tytuł zagadki",
-    "difficulty": "easy",  # easy / medium / hard
-    "story": "Krótki zarys historii widoczny dla gracza...",
-    "solution": "Pełne rozwiązanie znane tylko AI...",
-}
-```
+Bash
+cd backend
+python -m uvicorn main:app --reload
+Zagraj!
+Otwórz przeglądarkę i wejdź pod adres http://127.0.0.1:8000.

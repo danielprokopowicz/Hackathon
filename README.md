@@ -14,8 +14,8 @@
 - Jakub Frydrych
 - Szymon Molenda
 
-## 🔗 Ważne Linki
-- **🎬 Wideo (Demo) - YouTube:** [Link do YouTube]
+## 🔗 Linki
+- **🎬 Wideo (Demo) - YouTube:** https://youtu.be/BezeR4qzNyU
 
 ---
 
@@ -56,23 +56,43 @@ Po rozwiązaniu zagadki, gracze odblokowują **"Pigułkę Wiedzy"** — krótką
 
 ---
 
-## 🚀 Jak uruchomić lokalnie
+## 🚀 Jak uruchomić projekt:
 
-1. **Sklonuj repozytorium:**
-   ```bash
-   git clone [TWÓJ LINK DO GITHUBA]
-   cd hackathon
-   cd rozwiklaj_to
-2. Zainstaluj zależności:
-   ```bash
-   pip install -r requirements.txt
+### Przygotowanie
 
-3. Skonfiguruj klucz API:
-Projekt korzysta z Google GenAI. Aby uruchomić go lokalnie, proszę utworzyć plik .env w folderze backend i dodać mój klucz API.
+1. **Włącz Docker Engine**  
+Upewnij się, że aplikacja Docker Desktop jest włączona i działa w tle - powinien być widoczny status "Engine running"
+<br></br>
 
-4. Uruchom serwer backendowy:
-   ```bash
-   cd backend
-   python -m uvicorn main:app --reload
-Zagraj!
-Otwórz przeglądarkę i wejdź pod adres http://127.0.0.1:8000.
+2. **Wygeneruj klucz API:**  
+    * Zaloguj się na stronie Google AI Studio,
+    * Wejdź w zakładkę 'API keys', a następnie kliknij w przycisk 'Create API key',
+    * Podaj dowolną nazwę oraz w sekcji 'Choose an imported project' wybierz 'Default Gemini Project',
+    * Kliknij przycisk 'Create key',
+    * Skopiuj zawartość pod wierszem 'API Key'.
+
+### Uruchamianie projektu
+
+1. **Sklonuj Repozytorium**  
+Otwórz terminal i sklonuj repozytorium na swój komputer:
+```git clone <LINK DO REPO>```
+<br></br>
+2. **Przejdź do głównego folderu**  
+Wejdź do głównego katalogu, poleceniem:
+```cd Hackathon```
+<br></br>
+3. **Skonfiguruj klucz API**  
+Nasza aplikacja korzysta z modelu Google Gemini, dlatego potrzebuje klucza API do działania.
+   * Otwórz plik, zlokalizowany w głównym katalogu projektu (Hackathon), ```docker-compose.yml``` w dowolnym edytorze tekstu,
+   * Znajdź sekcję ```environment:```,
+   * Podmień wartość w linijce ```GEMINI_API_KEY=XXXX```, zastępując 'XXXX' swoim wygenerowanym kluczem API z Google AI Studio.
+<br></br>
+4. **Uruchom aplikację**  
+Będąc w terminalu w folderze projektu, wpisz poniższą komendę:
+```docker compose up -d```  
+Docker pobierze niezbędne pliki i uruchomi środowisko w tle.
+<br></br>
+
+5. **Korzystaj z aplikacji**  
+Aplikacja jest teraz dostępna w przeglądarce po wpisaniu:```localhost:8000```    
+**(Aby wyłączyć aplikację, należy wpisać w terminalu: ```docker compose down```)**

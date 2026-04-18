@@ -21,7 +21,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-client = genai.Client(api_key="AQ.Ab8RN6LbnO51caxuSYND3bznM-MXmflMW9WLH9wcW4h92QEF8Q")
+api_key = os.getenv("GEMINI_API_KEY")
+
+client = genai.Client(api_key=api_key)
 GEMINI_MODEL = "gemma-3-27b-it"
 
 STORIES_FILE = Path(__file__).parent / "stories.json"

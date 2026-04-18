@@ -59,21 +59,60 @@
     #diffTabs .tab[data-diff="medium"].active { background: #c4891a; border-color: #c4891a; color: white; }
     #diffTabs .tab[data-diff="hard"].active { background: #950408; border-color: #950408; color: white; }
 
-    .story-card p.story-preview {
-        max-height: 0;
-        opacity: 0;
-        overflow: hidden;
-        margin: 0;
-        transition: max-height 0.4s ease, opacity 0.4s ease, margin-top 0.4s ease;
+    .story-card {
+        background: transparent !important;
+        padding: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        perspective: 1000px; /* Tworzy głębię 3D */
+        height: 220px; /* STAŁY ROZMIAR KAFELKA */
+    }
+
+    .flip-card-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+        transform-style: preserve-3d;
+    }
+
+    .story-card:hover .flip-card-inner {
+        transform: rotateY(180deg); /* Obrót po najechaniu */
+    }
+
+    .flip-card-front, .flip-card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden; /* Ukrywa tył karty */
+        border-radius: 12px;
+        padding: 20px;
+        background: #ffffff;
+        border: 1px solid #eaeaea;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .flip-card-back {
+        transform: rotateY(180deg);
+        background: #f8fafc;
+        border-left: 4px solid #003399; /* Akcent PKO na odwrocie */
+    }
+
+    .flip-card-back p {
         font-size: 0.9rem;
-        color: #555;
+        color: #333;
+        margin: 0;
+        overflow-y: auto; /* Pasek przewijania, jeśli tekst jest bardzo długi */
+        max-height: 130px;
+        padding-right: 5px;
+        line-height: 1.5;
     }
-    
-    .story-card:hover p.story-preview {
-        max-height: 200px; /* Zapas miejsca na tekst */
-        opacity: 1;
-        margin-top: 12px;
-    }
+
+    /* Ładny, cienki pasek przewijania dla opisu na odwrocie */
+    .flip-card-back p::-webkit-scrollbar { width: 4px; }
+    .flip-card-back p::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
   </style>
 </head>
 <body>
@@ -278,13 +317,28 @@
             if (story.category === 'Tauron')          catClass = 'badge-tauron';
             const translatedDiff = diffTextPl[story.difficulty]  || story.difficulty;
             const classDiff      = diffClassMap[story.difficulty] || 'medium';
+            
             card.innerHTML = `
-                <div style="display:flex;justify-content:space-between;align-items:center;">
-                    <span class="${catClass}">${story.category || 'Klasyczne'}</span>
-                    <span class="badge ${classDiff}">${translatedDiff}</span>
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+                            <span class="${catClass}">${story.category || 'Klasyczne'}</span>
+                            <span class="badge ${classDiff}">${translatedDiff}</span>
+                        </div>
+                        <h3 style="font-size: 1.2rem; text-align: center; margin: auto 0;">${story.title}</h3>
+                        <div style="margin-top:auto; font-size:0.85rem; color:#888; text-align:center;">
+                            Najedź, aby przeczytać ⤻
+                        </div>
+                    </div>
+                    
+                    <div class="flip-card-back">
+                        <h4 style="margin-bottom: 8px; font-size: 0.95rem; color: #1a1a1a;">Zarys historii:</h4>
+                        <p>${story.story}</p>
+                        <div style="margin-top:auto; font-size:0.85rem; color:#003399; text-align:center; font-weight:bold;">
+                            Kliknij, aby zagrać!
+                        </div>
+                    </div>
                 </div>
-                <h3>${story.title}</h3>
-                <p class="story-preview">${story.story}</p>
             `;
             card.onclick = () => openGame(story);
             grid.appendChild(card);
